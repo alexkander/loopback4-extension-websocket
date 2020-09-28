@@ -12,17 +12,15 @@ export class WebSocketServer extends Context {
   protected io: SocketIO.Server;
   protected _httpServer: HttpServer;
 
-  protected options: ServerOptions = {
-    origins: ['http://localhost:3000', 'http://localhost:5000'],
-  };
-
   constructor(
     @inject(CoreBindings.APPLICATION_INSTANCE) public app: Application,
     @inject(WebsocketBindings.CONFIG, {optional: true}) config: WebsocketOptions = {},
+    @inject(WebsocketBindings.OPTIONS, {optional: true}) protected options: ServerOptions = {},
   ) {
     super(app);
-    this._httpServer = new HttpServer(() => {}, config);
-    this.io = SocketIO(this.options);
+    const requestListener = this.getSync(WebsocketBindings.REQUEST_LISTENER);
+    this._httpServer = new HttpServer(requestListener, config);
+    this.io = SocketIO(options);
     app.bind(WebsocketBindings.IO).to(this.io);
   }
 

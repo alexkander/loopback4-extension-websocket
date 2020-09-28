@@ -11,6 +11,9 @@ export class WebsocketComponent implements Component {
       .bind(WebsocketBindings.WEBSOCKET_SERVER_CLASS)
       .toClass(WebSocketServer)
       .inScope(BindingScope.SINGLETON);
+
+    app.bind(WebsocketBindings.REQUEST_LISTENER)
+      .to(() => {})
   }
 
 }
