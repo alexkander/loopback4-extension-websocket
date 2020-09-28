@@ -22,7 +22,6 @@
   "dependencies": {
     "@loopback/core": "^2.10.1",
     "@loopback/http-server": "^2.2.2",
-    "@loopback/rest": "^6.2.0",
     "socket.io": "^2.3.0"
   },
   "devDependencies": {

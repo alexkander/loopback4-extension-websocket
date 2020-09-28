@@ -1,10 +1,9 @@
-import {ApplicationConfig} from "@loopback/core";
-import {RestApplication} from "@loopback/rest";
+import {Application, ApplicationConfig} from "@loopback/core";
 import {WebsocketComponent} from "./websocket.component";
 import {WebsocketBindings} from "./keys";
 import {WebSocketServer} from "./websocket.server";
 
-export class WebsocketApplication extends RestApplication {
+export class WebsocketApplication extends Application {
 
   constructor(options: ApplicationConfig = {}) {
     super(options);
