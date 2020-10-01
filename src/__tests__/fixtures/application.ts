@@ -27,3 +27,6 @@ export const SAMPLE_CONTROLER_ROUTE = '/sample/ws';
 
 @ws.controller(SAMPLE_CONTROLER_ROUTE)
 export class SampleController {}
+
+@ws.controller(SAMPLE_CONTROLER_ROUTE)
+export class ControllerWithSubscriberMethods {}
