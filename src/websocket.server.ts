@@ -2,11 +2,12 @@ import {
   Application,
   Constructor,
   Context,
+  ControllerClass,
   CoreBindings,
   inject,
 } from '@loopback/core';
 import { HttpServer } from '@loopback/http-server';
-import SocketIO, { ServerOptions } from 'socket.io';
+import SocketIO, { Namespace, ServerOptions, Socket } from 'socket.io';
 import { WebsocketBindings } from './keys';
 import { WebsocketOptions } from './types';
 import {
@@ -60,9 +61,9 @@ export class WebSocketServer extends Context {
    * @param meta
    */
   controller(
-    controllerClass: Constructor<any>,
+    controllerClass: Constructor<unknown>,
     meta?: WebSocketMetadata | string | RegExp
-  ) {
+  ): Namespace | SocketIO.Server {
     if (meta instanceof RegExp || typeof meta === 'string') {
       meta = { namespace: meta } as WebSocketMetadata;
     }
@@ -75,16 +76,29 @@ export class WebSocketServer extends Context {
         .bind(WebsocketBindings.getNamespaceKeyForName(meta.name))
         .to(nsp);
     }
-    nsp.on('connection', async (socket) => {
-      debug(
-        'Websocket connected: id=%s namespace=%s',
-        socket.id,
-        socket.nsp.name
-      );
-      await new WebSocketControllerFactory(this, controllerClass).create(
+    nsp.on('connection', (socket) => {
+      this.createControllerInstanceForSocket(
+        controllerClass as Constructor<ControllerClass>,
         socket
-      );
+      ).catch((err) => {
+        debug(
+          'Websocket error: error creating controller instance con connection',
+          err
+        );
+      });
     });
     return nsp;
+  }
+
+  protected createControllerInstanceForSocket(
+    controllerClass: Constructor<ControllerClass>,
+    socket: Socket
+  ) {
+    debug(
+      'Websocket connected: id=%s namespace=%s',
+      socket.id,
+      socket.nsp.name
+    );
+    return new WebSocketControllerFactory(this, controllerClass).create(socket);
   }
 }
