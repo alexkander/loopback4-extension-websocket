@@ -1,7 +1,7 @@
-import {BindingScope, Constructor, Context,} from '@loopback/context';
-import {ControllerClass} from '@loopback/core';
-import {Socket} from 'socket.io';
-import {WebsocketBindings} from './keys';
+import { BindingScope, Constructor, Context } from '@loopback/context';
+import { ControllerClass } from '@loopback/core';
+import { Socket } from 'socket.io';
+import { WebsocketBindings } from './keys';
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
 export class WebSocketControllerFactory extends Context {
@@ -9,11 +9,11 @@ export class WebSocketControllerFactory extends Context {
 
   constructor(
     private parentCtx: Context,
-    private controllerClass: Constructor<ControllerClass>,
+    private controllerClass: Constructor<ControllerClass>
   ) {
     super(parentCtx);
     this.bind(WebsocketBindings.CONTROLLER_CONSTRUCTOR).to(
-      this.controllerClass,
+      this.controllerClass
     );
     this.bind(WebsocketBindings.CONTROLLER_CLASS)
       .toClass(this.controllerClass)
@@ -34,6 +34,5 @@ export class WebSocketControllerFactory extends Context {
    * Set up the controller for the given socket
    * @param socket
    */
-  async setup(socket: Socket) {
-  }
+  async setup(socket: Socket) {}
 }

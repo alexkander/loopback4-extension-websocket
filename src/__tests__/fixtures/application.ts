@@ -1,11 +1,12 @@
-import {ApplicationConfig} from '@loopback/core';
+import { ApplicationConfig } from '@loopback/core';
 
-import {ws} from "../../decorators/websocket.decorator";
-import {WebsocketApplication} from "../../websocket.application";
+import { ws } from '../../decorators/websocket.decorator';
+import { WebsocketApplication } from '../../websocket.application';
 
 export class TestApplication extends WebsocketApplication {
   constructor(options: ApplicationConfig = {}) {
     super(options);
+    this.websocketServer.controller(SampleController);
   }
 }
 
@@ -20,13 +21,9 @@ export async function givenRunningApplication() {
   return app;
 }
 
-export class DummyController {
-
-}
+export class DummyController {}
 
 export const SAMPLE_CONTROLER_ROUTE = '/sample/ws';
 
 @ws.controller(SAMPLE_CONTROLER_ROUTE)
-export class SampleController {
-
-}
+export class SampleController {}

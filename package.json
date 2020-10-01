@@ -23,6 +23,7 @@
   "license": "MIT",
   "dependencies": {
     "@loopback/core": "^2.10.1",
+    "@loopback/eslint-config": "^10.0.0",
     "@loopback/http-server": "^2.2.2",
     "socket.io": "^2.3.0"
   },
@@ -30,9 +31,16 @@
     "@loopback/build": "^6.2.4",
     "@loopback/testlab": "^3.2.6",
     "@types/socket.io": "^2.1.11",
-    "@types/socket.io-client": "^1.4.33",
+    "@types/socket.io-client": "^1.4.34",
+    "@typescript-eslint/eslint-plugin": "^4.3.0",
+    "@typescript-eslint/parser": "^4.3.0",
+    "eslint": "^7.10.0",
+    "eslint-config-prettier": "^6.12.0",
+    "eslint-plugin-eslint-plugin": "^2.3.0",
+    "eslint-plugin-mocha": "^8.0.0",
+    "eslint-plugin-prettier": "^3.1.4",
     "p-event": "^4.2.0",
-    "socket.io-client": "^2.3.0"
+    "socket.io-client": "^2.3.1"
   },
   "keywords": [
     "LoopBack",

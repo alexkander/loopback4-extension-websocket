@@ -1,19 +1,20 @@
-import {Application, BindingScope, Component, CoreBindings, inject} from '@loopback/core';
-import {WebsocketBindings} from "./keys";
-import {WebSocketServer} from "./websocket.server";
+import {
+  Application,
+  BindingScope,
+  Component,
+  CoreBindings,
+  inject,
+} from '@loopback/core';
+import { WebsocketBindings } from './keys';
+import { WebSocketServer } from './websocket.server';
 
 export class WebsocketComponent implements Component {
-
-  constructor(
-    @inject(CoreBindings.APPLICATION_INSTANCE) app: Application,
-  ) {
+  constructor(@inject(CoreBindings.APPLICATION_INSTANCE) app: Application) {
     app
       .bind(WebsocketBindings.WEBSOCKET_SERVER_CLASS)
       .toClass(WebSocketServer)
       .inScope(BindingScope.SINGLETON);
 
-    app.bind(WebsocketBindings.REQUEST_LISTENER)
-      .to(() => {})
+    app.bind(WebsocketBindings.REQUEST_LISTENER).to(() => {});
   }
-
 }

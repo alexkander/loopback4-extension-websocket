@@ -1,11 +1,10 @@
-import {expect} from '@loopback/testlab';
+import { expect } from '@loopback/testlab';
 import io from 'socket.io-client';
 import pEvent from 'p-event';
 import {
   givenRunningApplication,
   SAMPLE_CONTROLER_ROUTE,
-  SampleController,
-  TestApplication
+  TestApplication,
 } from '../fixtures/application';
 
 describe('SocketIOServer', () => {
@@ -13,7 +12,6 @@ describe('SocketIOServer', () => {
 
   before(async () => {
     app = await givenRunningApplication();
-    app.websocketServer.controller(SampleController);
   });
 
   after(async () => {

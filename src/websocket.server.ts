@@ -1,10 +1,19 @@
-import {Application, Constructor, Context, CoreBindings, inject} from "@loopback/core";
-import {HttpServer} from "@loopback/http-server";
-import SocketIO, {ServerOptions} from 'socket.io';
-import {WebsocketBindings} from "./keys";
-import {WebsocketOptions} from "./types";
-import {getWebSocketMetadata, WebSocketMetadata} from "./decorators/websocket.decorator";
-import {WebSocketControllerFactory} from "./websocket-controller-factory";
+import {
+  Application,
+  Constructor,
+  Context,
+  CoreBindings,
+  inject,
+} from '@loopback/core';
+import { HttpServer } from '@loopback/http-server';
+import SocketIO, { ServerOptions } from 'socket.io';
+import { WebsocketBindings } from './keys';
+import { WebsocketOptions } from './types';
+import {
+  getWebSocketMetadata,
+  WebSocketMetadata,
+} from './decorators/websocket.decorator';
+import { WebSocketControllerFactory } from './websocket-controller-factory';
 
 const debug = require('debug')('loopback:websocket');
 
@@ -14,8 +23,10 @@ export class WebSocketServer extends Context {
 
   constructor(
     @inject(CoreBindings.APPLICATION_INSTANCE) public app: Application,
-    @inject(WebsocketBindings.CONFIG, {optional: true}) config: WebsocketOptions = {},
-    @inject(WebsocketBindings.OPTIONS, {optional: true}) protected options: ServerOptions = {},
+    @inject(WebsocketBindings.CONFIG, { optional: true })
+    config: WebsocketOptions = {},
+    @inject(WebsocketBindings.OPTIONS, { optional: true })
+    protected options: ServerOptions = {}
   ) {
     super(app);
     const requestListener = this.getSync(WebsocketBindings.REQUEST_LISTENER);
@@ -48,25 +59,32 @@ export class WebSocketServer extends Context {
    * @param ControllerClass
    * @param meta
    */
-  controller(controllerClass: Constructor<any>, meta?: WebSocketMetadata | string | RegExp) {
+  controller(
+    controllerClass: Constructor<any>,
+    meta?: WebSocketMetadata | string | RegExp
+  ) {
     if (meta instanceof RegExp || typeof meta === 'string') {
-      meta = {namespace: meta} as WebSocketMetadata;
+      meta = { namespace: meta } as WebSocketMetadata;
     }
     if (meta == null) {
       meta = getWebSocketMetadata(controllerClass) as WebSocketMetadata;
     }
     const nsp = meta?.namespace ? this.io.of(meta.namespace) : this.io;
     if (meta?.name) {
-      this.app.bind(WebsocketBindings.getNamespaceKeyForName(meta.name)).to(nsp);
+      this.app
+        .bind(WebsocketBindings.getNamespaceKeyForName(meta.name))
+        .to(nsp);
     }
-    nsp.on('connection', async socket => {
-      debug('Websocket connected: id=%s namespace=%s', socket.id, socket.nsp.name);
+    nsp.on('connection', async (socket) => {
+      debug(
+        'Websocket connected: id=%s namespace=%s',
+        socket.id,
+        socket.nsp.name
+      );
       await new WebSocketControllerFactory(this, controllerClass).create(
-        socket,
+        socket
       );
     });
     return nsp;
-
   }
-
 }

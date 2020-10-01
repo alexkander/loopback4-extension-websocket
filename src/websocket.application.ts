@@ -1,10 +1,9 @@
-import {Application, ApplicationConfig} from "@loopback/core";
-import {WebsocketComponent} from "./websocket.component";
-import {WebsocketBindings} from "./keys";
-import {WebSocketServer} from "./websocket.server";
+import { Application, ApplicationConfig } from '@loopback/core';
+import { WebsocketComponent } from './websocket.component';
+import { WebsocketBindings } from './keys';
+import { WebSocketServer } from './websocket.server';
 
 export class WebsocketApplication extends Application {
-
   constructor(options: ApplicationConfig = {}) {
     super(options);
     this.component(WebsocketComponent);
@@ -12,7 +11,7 @@ export class WebsocketApplication extends Application {
 
   get websocketServer(): WebSocketServer {
     return this.getSync<WebSocketServer>(
-      WebsocketBindings.WEBSOCKET_SERVER_CLASS,
+      WebsocketBindings.WEBSOCKET_SERVER_CLASS
     );
   }
 
@@ -23,5 +22,4 @@ export class WebsocketApplication extends Application {
   public async stop(): Promise<void> {
     await this.websocketServer.stop();
   }
-
 }
