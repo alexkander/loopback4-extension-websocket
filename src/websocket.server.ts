@@ -46,12 +46,11 @@ export class WebSocketServer extends Context {
   }
 
   async stop() {
-    const close = new Promise<void>((resolve, reject) => {
+    await new Promise<void>((resolve, reject) => {
       this.io.close(() => {
         resolve();
       });
     });
-    await close;
     await this._httpServer.stop();
   }
 
@@ -101,6 +100,9 @@ export class WebSocketServer extends Context {
       socket.id,
       socket.nsp.name
     );
-    return new WebSocketControllerFactory(this, controllerClass).create(socket);
+    return new WebSocketControllerFactory(
+      this,
+      controllerClass
+    ).createController(socket);
   }
 }

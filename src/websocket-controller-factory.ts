@@ -32,7 +32,7 @@ export class WebSocketControllerFactory extends Context {
       .inScope(BindingScope.CONTEXT);
   }
 
-  async create(socket: Socket) {
+  async createController(socket: Socket) {
     this.bind(WebsocketBindings.SOCKET).to(socket);
     // Instantiate the controller instance
     this.controller = await this.get(WebsocketBindings.CONTROLLER_CLASS);

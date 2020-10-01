@@ -32,7 +32,7 @@ describe('WebSocketControllerFactory', () => {
 
     it('.create must return a instance of controller for a socket connection', async () => {
       const dummySocket = {} as Socket;
-      const controllerInstance = await factory.create(dummySocket);
+      const controllerInstance = await factory.createController(dummySocket);
       expect(controllerInstance).to.be.a.instanceOf(
         ControllerWithSubscriberMethods
       );
