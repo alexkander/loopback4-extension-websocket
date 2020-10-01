@@ -29,4 +29,22 @@ export const SAMPLE_CONTROLER_ROUTE = '/sample/ws';
 export class SampleController {}
 
 @ws.controller(SAMPLE_CONTROLER_ROUTE)
-export class ControllerWithSubscriberMethods {}
+export class ControllerWithSubscriberMethods {
+  @ws.connect()
+  onConnectOne() {}
+
+  @ws.connect()
+  onConnectTwo() {}
+
+  @ws.subscribe('firstEventName')
+  firstMethod() {}
+
+  @ws.subscribe('secondEventName')
+  secondMethod() {}
+
+  @ws.subscribe('thirdEventName')
+  thirdMethod() {}
+
+  @ws.disconnect()
+  onDisconnect() {}
+}

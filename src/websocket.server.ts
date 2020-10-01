@@ -61,7 +61,8 @@ export class WebSocketServer extends Context {
    * @param meta
    */
   controller(
-    controllerClass: Constructor<unknown>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    controllerClass: Constructor<any>,
     meta?: WebSocketMetadata | string | RegExp
   ): Namespace | SocketIO.Server {
     if (meta instanceof RegExp || typeof meta === 'string') {
@@ -91,7 +92,8 @@ export class WebSocketServer extends Context {
   }
 
   protected createControllerInstanceForSocket(
-    controllerClass: Constructor<ControllerClass>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    controllerClass: Constructor<any>,
     socket: Socket
   ) {
     debug(

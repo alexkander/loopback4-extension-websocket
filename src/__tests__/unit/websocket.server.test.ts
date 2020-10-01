@@ -8,10 +8,10 @@ import {
 } from '../fixtures/application';
 import { WebsocketBindings } from '../../keys';
 import { WebsocketComponent } from '../../websocket.component';
-import SocketIO, { Namespace } from 'socket.io';
+import { Server, Namespace } from 'socket.io';
 
 describe('WebsocketServer', () => {
-  let io: SocketIO.Server;
+  let io: Server;
   let app: Application, websocketServer: WebSocketServer;
 
   before(() => {
@@ -22,12 +22,16 @@ describe('WebsocketServer', () => {
   });
 
   it('app bind io Server instance', async () => {
-    expect(!!io).to.be.true();
+    expect(io).to.be.not.null();
+    // TODO: Check is a Server instance
+    expect(io).to.be.a.instanceOf(Object);
   });
 
   it('must return io instance when registry without string route', () => {
     const nsp = websocketServer.controller(DummyController);
     expect(nsp).to.be.equal(io);
+    // TODO: Check is a Namespace instance
+    expect(nsp).to.be.a.instanceOf(Object);
   });
 
   it('must return a nsp when a string route is specific it', () => {
