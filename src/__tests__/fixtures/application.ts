@@ -30,21 +30,41 @@ export class SampleController {}
 
 @ws.controller(SAMPLE_CONTROLER_ROUTE)
 export class ControllerWithSubscriberMethods {
+  public calledMethods = {
+    onConnectOne: 0,
+    onConnectTwo: 0,
+    firstMethod: 0,
+    secondMethod: 0,
+    thirdMethod: 0,
+    onDisconnect: 0,
+  };
   @ws.connect()
-  onConnectOne() {}
+  onConnectOne() {
+    this.calledMethods.onConnectOne += 1;
+  }
 
   @ws.connect()
-  onConnectTwo() {}
+  onConnectTwo() {
+    this.calledMethods.onConnectTwo += 1;
+  }
 
   @ws.subscribe('firstEventName')
-  firstMethod() {}
+  firstMethod() {
+    this.calledMethods.firstMethod += 1;
+  }
 
   @ws.subscribe('secondEventName')
-  secondMethod() {}
+  secondMethod() {
+    this.calledMethods.secondMethod += 1;
+  }
 
   @ws.subscribe('thirdEventName')
-  thirdMethod() {}
+  thirdMethod() {
+    this.calledMethods.thirdMethod += 1;
+  }
 
   @ws.disconnect()
-  onDisconnect() {}
+  onDisconnect() {
+    this.calledMethods.onDisconnect += 1;
+  }
 }

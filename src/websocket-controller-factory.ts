@@ -5,6 +5,7 @@ import {
   Context,
   MetadataAccessor,
   MetadataInspector,
+  invokeMethod,
 } from '@loopback/context';
 import { Socket } from 'socket.io';
 import { WebsocketBindings } from './keys';
@@ -45,7 +46,16 @@ export class WebSocketControllerFactory extends Context {
    * Set up the controller for the given socket
    * @param socket
    */
-  async setup(socket: Socket) {}
+  setup(socket: Socket) {
+    return this.connect(socket);
+  }
+
+  async connect(socket: Socket) {
+    const connectMethods = this.getDecoratedMethodsForConnect();
+    for (const m in connectMethods) {
+      await invokeMethod(this.controller, m, this, [socket]);
+    }
+  }
 
   getDecoratedMethodsForConnect() {
     return this.getAllMethodMetadataForKey(WEBSOCKET_CONNECT_METADATA);
