@@ -69,13 +69,17 @@ describe('WebSocketControllerFactory', () => {
       });
     });
 
-    it('get decorated methods for @ws.subscription() and @ws.disconnect()', () => {
-      const regularMethodsForSubscriptions = factory.getDecoratedMethodsForSubscription();
-      expect(regularMethodsForSubscriptions).to.be.containEql({
-        firstMethod: ['firstEventName'],
-        secondMethod: ['secondEventName'],
-        thirdMethod: ['thirdEventName'],
-        onDisconnect: ['disconnect'],
+    it('get decorated methods for @ws.subscription() by string and by regex', () => {
+      const methodsResult = factory.getDecorateSubscribeMethodsByEventName();
+      expect(methodsResult).to.be.containEql({
+        firstEventName1: ['firstMethod', 'topMethods'],
+        firstEventName2: ['firstMethod', 'topMethods'],
+        secondEventName: ['secondMethod', 'topMethods'],
+        thirdEventName: ['thirdMethod', 'topMethods'],
+        disconnect: ['onDisconnect'],
+        '/^secondEventName$/': ['secondMethod', 'topMethods'],
+        '/^fourthEventName$/': ['fourthMethod1', 'fourthMethod2'],
+        '/^fifthEventName$/': ['fifthMethod'],
       });
     });
 

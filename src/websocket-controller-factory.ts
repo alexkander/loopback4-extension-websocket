@@ -61,8 +61,26 @@ export class WebSocketControllerFactory extends Context {
     return this.getAllMethodMetadataForKey(WEBSOCKET_CONNECT_METADATA);
   }
 
-  getDecoratedMethodsForSubscription() {
-    return this.getAllMethodMetadataForKey(WEBSOCKET_SUBSCRIBE_METADATA);
+  getDecorateSubscribeMethodsByEventName() {
+    const methodsNamesByEventMatcher = new Map<string, String[]>();
+    const subscribeMethods = this.getDecorateSubscribeMethods();
+    for (const methodName in subscribeMethods) {
+      for (const macther of subscribeMethods[methodName]) {
+        const mactherString = macther.toString();
+        const methodsNames =
+          methodsNamesByEventMatcher.get(mactherString) ?? [];
+        methodsNames.push(methodName.toString());
+        methodsNamesByEventMatcher.set(mactherString, methodsNames);
+      }
+    }
+    return methodsNamesByEventMatcher;
+  }
+
+  protected getDecorateSubscribeMethods() {
+    const methods = this.getAllMethodMetadataForKey(
+      WEBSOCKET_SUBSCRIBE_METADATA
+    );
+    return methods;
   }
 
   protected getAllMethodMetadataForKey<V, DT extends DecoratorType>(
