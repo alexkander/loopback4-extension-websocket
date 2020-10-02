@@ -6,6 +6,7 @@ import { WebsocketApplication } from '../../websocket.application';
 import { ControllerWithSubscriberMethods } from '../fixtures/application';
 import { WebSocketControllerFactory } from '../../websocket-controller-factory';
 import { WebsocketBindings } from '../../keys';
+import { DummySocket } from '../fixtures/dummy-socket';
 
 describe('WebSocketControllerFactory', () => {
   let app: WebsocketApplication;
@@ -27,7 +28,7 @@ describe('WebSocketControllerFactory', () => {
   describe('after create WebSocketControllerFactory instance', () => {
     let factory: WebSocketControllerFactory;
     let createdController: unknown;
-    const dummySocket = {} as Socket;
+    const dummySocket = (new DummySocket() as Object) as Socket;
 
     before(async () => {
       factory = getNewFactory();
@@ -75,42 +76,34 @@ describe('WebSocketControllerFactory', () => {
         firstEventName1: {
           matcher: 'firstEventName1',
           methodNames: ['firstMethod', 'topMethods'],
-          isRegex: false,
         },
         firstEventName2: {
           matcher: 'firstEventName2',
           methodNames: ['firstMethod', 'topMethods'],
-          isRegex: false,
         },
         secondEventName: {
           matcher: 'secondEventName',
           methodNames: ['secondMethod', 'topMethods'],
-          isRegex: false,
         },
         thirdEventName: {
           matcher: 'thirdEventName',
           methodNames: ['thirdMethod', 'topMethods'],
-          isRegex: false,
         },
         disconnect: {
           matcher: 'disconnect',
           methodNames: ['onDisconnect'],
-          isRegex: false,
         },
         '/^secondEventName$/': {
           matcher: /^secondEventName$/,
           methodNames: ['secondMethod', 'topMethods'],
-          isRegex: true,
         },
         '/^fourthEventName$/': {
           matcher: /^fourthEventName$/,
           methodNames: ['fourthMethod1', 'fourthMethod2'],
-          isRegex: true,
         },
         '/^fifthEventName$/': {
           matcher: /^fifthEventName$/,
           methodNames: ['fifthMethod'],
-          isRegex: true,
         },
       });
     });
