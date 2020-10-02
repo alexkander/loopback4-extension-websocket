@@ -15,6 +15,12 @@ import {
 } from './decorators/websocket.decorator';
 import { DecoratorType, MetadataMap } from '@loopback/metadata/src/types';
 
+export type WebsocketEventMatcherInfo = {
+  matcher: string | RegExp;
+  methodNames: string[];
+  isRegex: boolean;
+};
+
 /* eslint-disable @typescript-eslint/no-misused-promises */
 export class WebSocketControllerFactory extends Context {
   private controller: ControllerClass;
@@ -52,8 +58,8 @@ export class WebSocketControllerFactory extends Context {
 
   async connect(socket: Socket) {
     const connectMethods = this.getDecoratedMethodsForConnect();
-    for (const m in connectMethods) {
-      await invokeMethod(this.controller, m, this, [socket]);
+    for (const methodName in connectMethods) {
+      await invokeMethod(this.controller, methodName, this, [socket]);
     }
   }
 
@@ -62,25 +68,25 @@ export class WebSocketControllerFactory extends Context {
   }
 
   getDecorateSubscribeMethodsByEventName() {
-    const methodsNamesByEventMatcher = new Map<string, String[]>();
+    const eventsMatchersInfo = new Map<string, WebsocketEventMatcherInfo>();
     const subscribeMethods = this.getDecorateSubscribeMethods();
     for (const methodName in subscribeMethods) {
-      for (const macther of subscribeMethods[methodName]) {
-        const mactherString = macther.toString();
-        const methodsNames =
-          methodsNamesByEventMatcher.get(mactherString) ?? [];
-        methodsNames.push(methodName.toString());
-        methodsNamesByEventMatcher.set(mactherString, methodsNames);
+      for (const matcher of subscribeMethods[methodName]) {
+        const matcherString = matcher.toString();
+        const eventMatcherInfo = eventsMatchersInfo.get(matcherString) ?? {
+          matcher: matcher,
+          methodNames: [],
+          isRegex: matcher instanceof RegExp,
+        };
+        eventMatcherInfo.methodNames.push(methodName);
+        eventsMatchersInfo.set(matcherString, eventMatcherInfo);
       }
     }
-    return methodsNamesByEventMatcher;
+    return eventsMatchersInfo;
   }
 
   protected getDecorateSubscribeMethods() {
-    const methods = this.getAllMethodMetadataForKey(
-      WEBSOCKET_SUBSCRIBE_METADATA
-    );
-    return methods;
+    return this.getAllMethodMetadataForKey(WEBSOCKET_SUBSCRIBE_METADATA);
   }
 
   protected getAllMethodMetadataForKey<V, DT extends DecoratorType>(

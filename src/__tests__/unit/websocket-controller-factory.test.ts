@@ -72,14 +72,46 @@ describe('WebSocketControllerFactory', () => {
     it('get decorated methods for @ws.subscription() by string and by regex', () => {
       const methodsResult = factory.getDecorateSubscribeMethodsByEventName();
       expect(methodsResult).to.be.containEql({
-        firstEventName1: ['firstMethod', 'topMethods'],
-        firstEventName2: ['firstMethod', 'topMethods'],
-        secondEventName: ['secondMethod', 'topMethods'],
-        thirdEventName: ['thirdMethod', 'topMethods'],
-        disconnect: ['onDisconnect'],
-        '/^secondEventName$/': ['secondMethod', 'topMethods'],
-        '/^fourthEventName$/': ['fourthMethod1', 'fourthMethod2'],
-        '/^fifthEventName$/': ['fifthMethod'],
+        firstEventName1: {
+          matcher: 'firstEventName1',
+          methodNames: ['firstMethod', 'topMethods'],
+          isRegex: false,
+        },
+        firstEventName2: {
+          matcher: 'firstEventName2',
+          methodNames: ['firstMethod', 'topMethods'],
+          isRegex: false,
+        },
+        secondEventName: {
+          matcher: 'secondEventName',
+          methodNames: ['secondMethod', 'topMethods'],
+          isRegex: false,
+        },
+        thirdEventName: {
+          matcher: 'thirdEventName',
+          methodNames: ['thirdMethod', 'topMethods'],
+          isRegex: false,
+        },
+        disconnect: {
+          matcher: 'disconnect',
+          methodNames: ['onDisconnect'],
+          isRegex: false,
+        },
+        '/^secondEventName$/': {
+          matcher: /^secondEventName$/,
+          methodNames: ['secondMethod', 'topMethods'],
+          isRegex: true,
+        },
+        '/^fourthEventName$/': {
+          matcher: /^fourthEventName$/,
+          methodNames: ['fourthMethod1', 'fourthMethod2'],
+          isRegex: true,
+        },
+        '/^fifthEventName$/': {
+          matcher: /^fifthEventName$/,
+          methodNames: ['fifthMethod'],
+          isRegex: true,
+        },
       });
     });
 
