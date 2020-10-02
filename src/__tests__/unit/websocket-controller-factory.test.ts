@@ -1,38 +1,36 @@
 import { expect } from '@loopback/testlab';
-import { Constructor } from '@loopback/core';
 import { Socket } from 'socket.io';
 
 import { WebsocketApplication } from '../../websocket.application';
-import { ControllerWithSubscriberMethods } from '../fixtures/application';
+import {
+  ControllerWithSubscriberMethods,
+  getNewFactory,
+} from '../fixtures/application';
 import { WebSocketControllerFactory } from '../../websocket-controller-factory';
 import { WebsocketBindings } from '../../keys';
 import { DummySocket } from '../fixtures/dummy-socket';
 
 describe('WebSocketControllerFactory', () => {
   let app: WebsocketApplication;
-  const getNewFactory = () =>
-    new WebSocketControllerFactory(
-      app.websocketServer,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ControllerWithSubscriberMethods as Constructor<any>
-    );
 
   before(async () => {
     app = new WebsocketApplication();
   });
 
   it('must instance a ws controller factory', () => {
-    expect(!!getNewFactory()).to.be.true();
+    expect(!!getNewFactory(app)).to.be.true();
   });
 
   describe('after create WebSocketControllerFactory instance', () => {
     let factory: WebSocketControllerFactory;
     let createdController: unknown;
-    const dummySocket = (new DummySocket() as Object) as Socket;
+    const dummySocket = new DummySocket();
 
     before(async () => {
-      factory = getNewFactory();
-      createdController = await factory.createController(dummySocket);
+      factory = getNewFactory(app);
+      createdController = await factory.createController(
+        (dummySocket as Object) as Socket
+      );
     });
 
     it('.create must return a instance of controller for a socket connection', () => {
@@ -89,12 +87,8 @@ describe('WebSocketControllerFactory', () => {
           matcher: 'thirdEventName',
           methodNames: ['thirdMethod', 'topMethods'],
         },
-        disconnect: {
-          matcher: 'disconnect',
-          methodNames: ['onDisconnect'],
-        },
-        '/^secondEventName$/': {
-          matcher: /^secondEventName$/,
+        '/^otherSecondEventName$/': {
+          matcher: /^otherSecondEventName$/,
           methodNames: ['secondMethod', 'topMethods'],
         },
         '/^fourthEventName$/': {
@@ -105,13 +99,11 @@ describe('WebSocketControllerFactory', () => {
           matcher: /^fifthEventName$/,
           methodNames: ['fifthMethod'],
         },
+        disconnect: {
+          matcher: 'disconnect',
+          methodNames: ['onDisconnect'],
+        },
       });
-    });
-
-    it('connect decorated methods must has be called', async () => {
-      const controller = createdController as ControllerWithSubscriberMethods;
-      expect(controller.calledMethods.onConnectOne).to.be.equal(1);
-      expect(controller.calledMethods.onConnectTwo).to.be.equal(1);
     });
   });
 });

@@ -1,7 +1,12 @@
-import { ApplicationConfig } from '@loopback/core';
+import { ApplicationConfig, Constructor } from '@loopback/core';
 
-import { ws } from '../../decorators/websocket.decorator';
 import { WebsocketApplication } from '../../websocket.application';
+import { WebSocketControllerFactory } from '../../websocket-controller-factory';
+import { Socket } from 'socket.io';
+import { WebsocketBindings } from '../../keys';
+import pEvent from 'p-event';
+import io from 'socket.io-client';
+import { ws } from '../..';
 
 export class TestApplication extends WebsocketApplication {
   constructor(options: ApplicationConfig = {}) {
@@ -21,6 +26,28 @@ export async function givenRunningApplication() {
   return app;
 }
 
+export const withConnectedSockets = async (
+  app: TestApplication,
+  urlEndpoint: string,
+  callbacks: (client: SocketIOClient.Socket, server: Socket) => Promise<void>
+) => {
+  const url = app.websocketServer.url + urlEndpoint;
+  const ioServer = app.getSync(WebsocketBindings.IO);
+  const nsp = ioServer.nsps[urlEndpoint];
+  const serverPromise = pEvent(nsp, 'connection');
+  const socket = io(url);
+  const server = await serverPromise;
+  await callbacks(socket, server);
+  socket.disconnect();
+};
+
+export const getNewFactory = (app: WebsocketApplication) =>
+  new WebSocketControllerFactory(
+    app.websocketServer,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ControllerWithSubscriberMethods as Constructor<any>
+  );
+
 export class DummyController {}
 
 export const SAMPLE_CONTROLER_ROUTE = '/sample/ws';
@@ -28,7 +55,7 @@ export const SAMPLE_CONTROLER_ROUTE = '/sample/ws';
 @ws.controller(SAMPLE_CONTROLER_ROUTE)
 export class SampleController {}
 
-@ws.controller(SAMPLE_CONTROLER_ROUTE)
+@ws.controller()
 export class ControllerWithSubscriberMethods {
   public calledMethods = {
     onConnectOne: 0,
@@ -57,7 +84,7 @@ export class ControllerWithSubscriberMethods {
     this.calledMethods.firstMethod += 1;
   }
 
-  @ws.subscribe('secondEventName', /^secondEventName$/)
+  @ws.subscribe('secondEventName', /^otherSecondEventName$/)
   secondMethod() {
     this.calledMethods.secondMethod += 1;
   }
@@ -71,7 +98,7 @@ export class ControllerWithSubscriberMethods {
     'firstEventName1',
     'firstEventName2',
     'secondEventName',
-    /^secondEventName$/,
+    /^otherSecondEventName$/,
     'thirdEventName'
   )
   topMethods() {

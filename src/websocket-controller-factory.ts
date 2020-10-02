@@ -18,7 +18,6 @@ import { DecoratorType, MetadataMap } from '@loopback/metadata/src/types';
 export type WebsocketEventMatcherInfo = {
   matcher: string | RegExp;
   methodNames: string[];
-  isRegex: boolean;
 };
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
@@ -52,8 +51,9 @@ export class WebSocketControllerFactory extends Context {
    * Set up the controller for the given socket
    * @param socket
    */
-  setup(socket: Socket) {
-    return this.connect(socket);
+  async setup(socket: Socket) {
+    await this.connect(socket);
+    this.registerSubscribeMethods(socket);
   }
 
   async connect(socket: Socket) {
@@ -63,26 +63,60 @@ export class WebSocketControllerFactory extends Context {
     }
   }
 
+  protected registerSubscribeMethods(socket: Socket) {
+    const methodsByEventHandler = this.getDecorateSubscribeMethodsByEventName();
+    const regexMethodsHandlers = new Map<RegExp, Function[]>();
+    const methodHandlers = new Map<String, (...args: unknown[]) => unknown>();
+    methodsByEventHandler.forEach((eventMatcherInfo) => {
+      const { matcher, methodNames } = eventMatcherInfo;
+      methodNames.forEach((methodName) => {
+        let handler = methodHandlers.get(methodName);
+        if (!handler) {
+          handler = this.getCallback(methodName);
+          methodHandlers.set(methodName, handler);
+        }
+        if (matcher instanceof RegExp) {
+          const handlers = regexMethodsHandlers.get(matcher) ?? [];
+          handlers.push(handler);
+          regexMethodsHandlers.set(matcher, handlers);
+        } else {
+          socket.on(matcher, handler);
+        }
+      });
+    });
+    socket.use(async (packet, next) => {
+      const [eventName, ...args] = packet;
+      for (const iterator of regexMethodsHandlers.entries()) {
+        const [regex, handlers] = iterator;
+        if (eventName.match(regex)) {
+          for (const handler of handlers) {
+            await handler(args);
+          }
+        }
+      }
+      next();
+    });
+  }
+
   getDecoratedMethodsForConnect() {
     return this.getAllMethodMetadataForKey(WEBSOCKET_CONNECT_METADATA);
   }
 
   getDecorateSubscribeMethodsByEventName() {
-    const eventsMatchersInfo = new Map<string, WebsocketEventMatcherInfo>();
+    const eventMatchersInfo = new Map<string, WebsocketEventMatcherInfo>();
     const subscribeMethods = this.getDecorateSubscribeMethods();
     for (const methodName in subscribeMethods) {
       for (const matcher of subscribeMethods[methodName]) {
         const matcherString = matcher.toString();
-        const eventMatcherInfo = eventsMatchersInfo.get(matcherString) ?? {
+        const eventMatcherInfo = eventMatchersInfo.get(matcherString) ?? {
           matcher: matcher,
           methodNames: [],
-          isRegex: matcher instanceof RegExp,
         };
         eventMatcherInfo.methodNames.push(methodName);
-        eventsMatchersInfo.set(matcherString, eventMatcherInfo);
+        eventMatchersInfo.set(matcherString, eventMatcherInfo);
       }
     }
-    return eventsMatchersInfo;
+    return eventMatchersInfo;
   }
 
   protected getDecorateSubscribeMethods() {
@@ -98,5 +132,12 @@ export class WebSocketControllerFactory extends Context {
         this.controllerClass.prototype
       ) ?? ({} as MetadataMap<V>)
     );
+  }
+
+  private getCallback(methodName: string) {
+    return async (...args: unknown[]) => {
+      const eventCtx = new Context(this);
+      return invokeMethod(this.controller, methodName, eventCtx, args);
+    };
   }
 }
