@@ -1,6 +1,6 @@
 import { BindingKey, ControllerClass, CoreBindings } from '@loopback/core';
 import { Constructor } from '@loopback/context';
-import { WebsocketOptions } from './types';
+import { WebsocketOptions, WebsocketSequence } from './types';
 import { Server, ServerOptions, Socket } from 'socket.io';
 import { WebSocketServer } from './websocket.server';
 import { RequestListener } from '@loopback/http-server';
@@ -32,4 +32,6 @@ export namespace WebsocketBindings {
   export const NAMESPACE_KEY_FORMAT = `ws.namespace.[META_NAME]`;
   export const getNamespaceKeyForName = (name: string) =>
     NAMESPACE_KEY_FORMAT.split('[META_NAME]').join(name);
+
+  export const SEQUENCE = BindingKey.create<WebsocketSequence>('ws.sequence');
 }

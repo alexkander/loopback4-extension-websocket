@@ -12,10 +12,11 @@ import { WebsocketBindings } from './keys';
 import {
   WEBSOCKET_CONNECT_METADATA,
   WEBSOCKET_SUBSCRIBE_METADATA,
-} from './decorators/websocket.decorator';
+} from './decorators';
 import { DecoratorType, MetadataMap } from '@loopback/metadata/src/types';
+import { WebsocketDoneFunction } from './types';
 
-export type WebsocketEventMatcherInfo = {
+type WebsocketEventMatcherInfo = {
   matcher: string | RegExp;
   methodNames: string[];
 };
@@ -136,8 +137,13 @@ export class WebSocketControllerFactory extends Context {
 
   private getCallback(methodName: string) {
     return async (...args: unknown[]) => {
+      let done: WebsocketDoneFunction = async (_response: unknown) => {};
+      if (typeof args[args.length - 1] === 'function') {
+        done = args.pop() as WebsocketDoneFunction;
+      }
       const eventCtx = new Context(this);
-      return invokeMethod(this.controller, methodName, eventCtx, args);
+      const sequence = await eventCtx.get(WebsocketBindings.SEQUENCE);
+      await sequence.handle(methodName, args, done);
     };
   }
 }

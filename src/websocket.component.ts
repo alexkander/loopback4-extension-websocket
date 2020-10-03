@@ -7,6 +7,7 @@ import {
 } from '@loopback/core';
 import { WebsocketBindings } from './keys';
 import { WebSocketServer } from './websocket.server';
+import { DefaultWebsocketSequence } from './websocket.sequence';
 
 export class WebsocketComponent implements Component {
   constructor(@inject(CoreBindings.APPLICATION_INSTANCE) app: Application) {
@@ -16,5 +17,7 @@ export class WebsocketComponent implements Component {
       .inScope(BindingScope.SINGLETON);
 
     app.bind(WebsocketBindings.REQUEST_LISTENER).to(() => {});
+
+    app.bind(WebsocketBindings.SEQUENCE).toClass(DefaultWebsocketSequence);
   }
 }
