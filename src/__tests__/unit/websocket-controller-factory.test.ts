@@ -7,6 +7,7 @@ import { WebsocketControllerFactory } from '../../websocket-controller-factory';
 import { WebsocketBindings } from '../../keys';
 import { DummySocket } from '../fixtures/dummy-socket';
 import { WithSubscriberMethodsController } from '../fixtures/controllers/WithSubscriberMethods.controller';
+import { DummyController } from '../fixtures/controllers/Dummy.controller';
 
 describe('WebsocketControllerFactory', () => {
   let app: WebsocketApplication;
@@ -16,7 +17,7 @@ describe('WebsocketControllerFactory', () => {
   });
 
   it('must instance a ws controller factory', () => {
-    expect(!!getNewFactory(app)).to.be.true();
+    expect(!!getNewFactory(app, DummyController)).to.be.true();
   });
 
   describe('after create WebsocketControllerFactory instance', () => {
@@ -25,7 +26,7 @@ describe('WebsocketControllerFactory', () => {
     const dummySocket = new DummySocket();
 
     before(async () => {
-      factory = getNewFactory(app);
+      factory = getNewFactory(app, WithSubscriberMethodsController);
       createdController = await factory.createController(
         (dummySocket as Object) as Socket
       );

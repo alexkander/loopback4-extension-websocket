@@ -47,7 +47,7 @@ describe('SocketIOServer', () => {
       app,
       SAMPLE_CONTROLER_ROUTE,
       async (client, server) => {
-        const factory = getNewFactory(app);
+        const factory = getNewFactory(app, WithSubscriberMethodsController);
         const createdController: unknown = await factory.createController(
           server
         );

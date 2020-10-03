@@ -1,4 +1,4 @@
-import { Constructor } from '@loopback/core';
+import { Constructor } from '@loopback/context';
 import { Socket } from 'socket.io';
 import pEvent from 'p-event';
 import io from 'socket.io-client';
@@ -6,7 +6,6 @@ import io from 'socket.io-client';
 import { WebsocketApplication } from '../../websocket.application';
 import { WebsocketControllerFactory } from '../../websocket-controller-factory';
 import { WebsocketBindings } from '../../keys';
-import { WithSubscriberMethodsController } from './controllers/WithSubscriberMethods.controller';
 
 export const withConnectedSockets = async (
   app: WebsocketApplication,
@@ -23,9 +22,8 @@ export const withConnectedSockets = async (
   socket.disconnect();
 };
 
-export const getNewFactory = (app: WebsocketApplication) =>
-  new WebsocketControllerFactory(
-    app.websocketServer,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    WithSubscriberMethodsController as Constructor<any>
-  );
+export const getNewFactory = (
+  app: WebsocketApplication,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  controllerClass: Constructor<any>
+) => new WebsocketControllerFactory(app.websocketServer, controllerClass);
