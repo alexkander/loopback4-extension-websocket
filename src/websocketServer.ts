@@ -21,7 +21,7 @@ export type SockIOMiddleware = (
   fn: (err?: any) => void
 ) => void;
 
-export class WebSocketServer extends Context {
+export class WebsocketServer extends Context {
   protected io: SocketIO.Server;
   protected _httpServer: HttpServer;
 

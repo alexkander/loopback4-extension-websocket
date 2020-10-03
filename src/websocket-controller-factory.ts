@@ -22,7 +22,7 @@ type WebsocketEventMatcherInfo = {
 };
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
-export class WebSocketControllerFactory extends Context {
+export class WebsocketControllerFactory extends Context {
   private controller: ControllerClass;
 
   constructor(

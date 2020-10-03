@@ -6,11 +6,11 @@ import {
   ControllerWithSubscriberMethods,
   getNewFactory,
 } from '../fixtures/application';
-import { WebSocketControllerFactory } from '../../websocket-controller-factory';
+import { WebsocketControllerFactory } from '../../websocket-controller-factory';
 import { WebsocketBindings } from '../../keys';
 import { DummySocket } from '../fixtures/dummy-socket';
 
-describe('WebSocketControllerFactory', () => {
+describe('WebsocketControllerFactory', () => {
   let app: WebsocketApplication;
 
   before(async () => {
@@ -21,8 +21,8 @@ describe('WebSocketControllerFactory', () => {
     expect(!!getNewFactory(app)).to.be.true();
   });
 
-  describe('after create WebSocketControllerFactory instance', () => {
-    let factory: WebSocketControllerFactory;
+  describe('after create WebsocketControllerFactory instance', () => {
+    let factory: WebsocketControllerFactory;
     let createdController: unknown;
     const dummySocket = new DummySocket();
 

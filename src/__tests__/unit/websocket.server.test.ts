@@ -1,6 +1,6 @@
 import { expect } from '@loopback/testlab';
 import { Application } from '@loopback/core';
-import { WebSocketServer } from '../../websocket.server';
+import { WebsocketServer } from '../../websocketServer';
 import {
   DummyController,
   SAMPLE_CONTROLER_ROUTE,
@@ -12,12 +12,12 @@ import { Server, Namespace } from 'socket.io';
 
 describe('WebsocketServer', () => {
   let io: Server;
-  let app: Application, websocketServer: WebSocketServer;
+  let app: Application, websocketServer: WebsocketServer;
 
   before(() => {
     app = new Application();
     app.component(WebsocketComponent);
-    websocketServer = new WebSocketServer(app);
+    websocketServer = new WebsocketServer(app);
     io = app.getSync(WebsocketBindings.IO);
   });
 

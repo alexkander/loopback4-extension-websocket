@@ -6,13 +6,13 @@ import {
   MethodDecoratorFactory,
 } from '@loopback/context';
 
-export interface WebSocketMetadata {
+export interface WebsocketMetadata {
   name?: string;
   namespace?: string | RegExp;
 }
 
 export const WEBSOCKET_METADATA = MetadataAccessor.create<
-  WebSocketMetadata,
+  WebsocketMetadata,
   ClassDecorator
 >('websocket');
 
@@ -26,7 +26,7 @@ export const WEBSOCKET_SUBSCRIBE_METADATA = MetadataAccessor.create<
   MethodDecorator
 >('websocket:subscribe');
 
-export function getWebSocketMetadata(controllerClass: Constructor<unknown>) {
+export function getWebsocketMetadata(controllerClass: Constructor<unknown>) {
   return MetadataInspector.getClassMetadata(
     WEBSOCKET_METADATA,
     controllerClass
@@ -34,7 +34,7 @@ export function getWebSocketMetadata(controllerClass: Constructor<unknown>) {
 }
 
 export namespace ws {
-  export function controller(spec: WebSocketMetadata | string | RegExp = {}) {
+  export function controller(spec: WebsocketMetadata | string | RegExp = {}) {
     if (typeof spec === 'string' || spec instanceof RegExp) {
       spec = { namespace: spec };
     }

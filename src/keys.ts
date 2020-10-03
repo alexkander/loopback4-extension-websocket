@@ -8,7 +8,7 @@ import {
   WebsocketSequence,
 } from './types';
 import { Server, ServerOptions, Socket } from 'socket.io';
-import { WebSocketServer } from './websocket.server';
+import { WebsocketServer } from './websocketServer';
 import { RequestListener } from '@loopback/http-server';
 
 export namespace WebsocketBindings {
@@ -22,7 +22,7 @@ export namespace WebsocketBindings {
   export const REQUEST_LISTENER = BindingKey.create<RequestListener>(
     'ws.request.handler'
   );
-  export const WEBSOCKET_SERVER_CLASS = BindingKey.create<WebSocketServer>(
+  export const WEBSOCKET_SERVER_CLASS = BindingKey.create<WebsocketServer>(
     'ws.server.class'
   );
   export const CONTROLLER_CONSTRUCTOR = BindingKey.create<

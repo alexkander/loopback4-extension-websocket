@@ -1,7 +1,7 @@
 import { ApplicationConfig, Constructor } from '@loopback/core';
 
 import { WebsocketApplication } from '../../websocket.application';
-import { WebSocketControllerFactory } from '../../websocket-controller-factory';
+import { WebsocketControllerFactory } from '../../websocket-controller-factory';
 import { Socket } from 'socket.io';
 import { WebsocketBindings } from '../../keys';
 import pEvent from 'p-event';
@@ -42,7 +42,7 @@ export const withConnectedSockets = async (
 };
 
 export const getNewFactory = (app: WebsocketApplication) =>
-  new WebSocketControllerFactory(
+  new WebsocketControllerFactory(
     app.websocketServer,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ControllerWithSubscriberMethods as Constructor<any>

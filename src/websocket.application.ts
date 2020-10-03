@@ -1,7 +1,7 @@
 import { Application, ApplicationConfig } from '@loopback/core';
 import { WebsocketComponent } from './websocket.component';
 import { WebsocketBindings } from './keys';
-import { WebSocketServer } from './websocket.server';
+import { WebsocketServer } from './websocketServer';
 
 export class WebsocketApplication extends Application {
   constructor(options: ApplicationConfig = {}) {
@@ -9,8 +9,8 @@ export class WebsocketApplication extends Application {
     this.component(WebsocketComponent);
   }
 
-  get websocketServer(): WebSocketServer {
-    return this.getSync<WebSocketServer>(
+  get websocketServer(): WebsocketServer {
+    return this.getSync<WebsocketServer>(
       WebsocketBindings.WEBSOCKET_SERVER_CLASS
     );
   }
