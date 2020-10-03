@@ -1,19 +1,26 @@
 import { expect } from '@loopback/testlab';
 import pEvent from 'p-event';
+import { getNewFactory, withConnectedSockets } from '../fixtures/application';
 import {
-  ControllerWithSubscriberMethods,
-  getNewFactory,
-  givenRunningApplication,
   SAMPLE_CONTROLER_ROUTE,
-  TestApplication,
-  withConnectedSockets,
-} from '../fixtures/application';
+  SampleController,
+} from '../fixtures/controllers/Sample.controller';
+import { WithSubscriberMethodsController } from '../fixtures/controllers/WithSubscriberMethods.controller';
+import { WebsocketApplication } from '../../websocket.application';
 
 describe('SocketIOServer', () => {
-  let app: TestApplication;
+  let app: WebsocketApplication;
 
   before(async () => {
-    app = await givenRunningApplication();
+    app = new WebsocketApplication({
+      websocket: {
+        host: '127.0.0.1',
+        port: 0,
+      },
+    });
+    app.websocketServer.controller(SampleController);
+    app.websocketServer.controller(WithSubscriberMethodsController);
+    await app.start();
   });
 
   after(async () => {
@@ -44,7 +51,7 @@ describe('SocketIOServer', () => {
         const createdController: unknown = await factory.createController(
           server
         );
-        const controller = createdController as ControllerWithSubscriberMethods;
+        const controller = createdController as WithSubscriberMethodsController;
         const emitAntWait = async (eventName: string, args: unknown) => {
           client.emit(eventName, args);
           await pEvent(server, eventName);

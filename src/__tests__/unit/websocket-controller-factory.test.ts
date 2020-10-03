@@ -2,13 +2,11 @@ import { expect } from '@loopback/testlab';
 import { Socket } from 'socket.io';
 
 import { WebsocketApplication } from '../../websocket.application';
-import {
-  ControllerWithSubscriberMethods,
-  getNewFactory,
-} from '../fixtures/application';
+import { getNewFactory } from '../fixtures/application';
 import { WebsocketControllerFactory } from '../../websocket-controller-factory';
 import { WebsocketBindings } from '../../keys';
 import { DummySocket } from '../fixtures/dummy-socket';
+import { WithSubscriberMethodsController } from '../fixtures/controllers/WithSubscriberMethods.controller';
 
 describe('WebsocketControllerFactory', () => {
   let app: WebsocketApplication;
@@ -35,7 +33,7 @@ describe('WebsocketControllerFactory', () => {
 
     it('.create must return a instance of controller for a socket connection', () => {
       expect(createdController).to.be.a.instanceOf(
-        ControllerWithSubscriberMethods
+        WithSubscriberMethodsController
       );
     });
 
@@ -49,7 +47,7 @@ describe('WebsocketControllerFactory', () => {
         WebsocketBindings.CONTROLLER_CONSTRUCTOR
       );
       expect(controllerConstructor).to.be.equal(
-        ControllerWithSubscriberMethods
+        WithSubscriberMethodsController
       );
     });
 

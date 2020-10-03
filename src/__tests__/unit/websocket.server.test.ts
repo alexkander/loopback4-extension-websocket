@@ -1,14 +1,14 @@
 import { expect } from '@loopback/testlab';
 import { Application } from '@loopback/core';
 import { WebsocketServer } from '../../websocketServer';
-import {
-  DummyController,
-  SAMPLE_CONTROLER_ROUTE,
-  SampleController,
-} from '../fixtures/application';
 import { WebsocketBindings } from '../../keys';
 import { WebsocketComponent } from '../../websocket.component';
 import { Server, Namespace } from 'socket.io';
+import { DummyController } from '../fixtures/controllers/Dummy.controller';
+import {
+  SAMPLE_CONTROLER_ROUTE,
+  SampleController,
+} from '../fixtures/controllers/Sample.controller';
 
 describe('WebsocketServer', () => {
   let io: Server;
