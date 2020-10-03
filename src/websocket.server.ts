@@ -10,13 +10,16 @@ import { HttpServer } from '@loopback/http-server';
 import SocketIO, { Namespace, ServerOptions, Socket } from 'socket.io';
 import { WebsocketBindings } from './keys';
 import { WebsocketOptions } from './types';
-import {
-  getWebSocketMetadata,
-  WebSocketMetadata,
-} from './decorators/websocket.decorator';
+import { getWebSocketMetadata, WebSocketMetadata } from './decorators';
 import { WebSocketControllerFactory } from './websocket-controller-factory';
 
 const debug = require('debug')('loopback:websocket');
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+export type SockIOMiddleware = (
+  socket: Socket,
+  fn: (err?: any) => void
+) => void;
 
 export class WebSocketServer extends Context {
   protected io: SocketIO.Server;
@@ -40,13 +43,21 @@ export class WebSocketServer extends Context {
     return this._httpServer?.url;
   }
 
+  /**
+   * Register a sock.io middleware function
+   * @param fn
+   */
+  use(fn: SockIOMiddleware) {
+    return this.io.use(fn);
+  }
+
   async start() {
     await this._httpServer.start();
     this.io.attach(this._httpServer.server, this.options);
   }
 
   async stop() {
-    await new Promise<void>((resolve, reject) => {
+    await new Promise<void>((resolve, _reject) => {
       this.io.close(() => {
         resolve();
       });
@@ -56,7 +67,7 @@ export class WebSocketServer extends Context {
 
   /**
    * Register a websocket controller
-   * @param ControllerClass
+   * @param controllerClass
    * @param meta
    */
   controller(
@@ -77,6 +88,9 @@ export class WebSocketServer extends Context {
         .to(nsp);
     }
     nsp.on('connection', (socket) => {
+      debug(
+        `Websocket connected: id=${socket.id} namespace=${socket.nsp.name}`
+      );
       this.createControllerInstanceForSocket(
         controllerClass as Constructor<ControllerClass>,
         socket
