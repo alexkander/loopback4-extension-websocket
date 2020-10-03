@@ -7,7 +7,7 @@ import {
   ProviderMap,
 } from '@loopback/core';
 import { WebsocketBindings } from './keys';
-import { WebsocketServer } from './websocketServer';
+import { WebsocketServer } from './websocket.server';
 import { DefaultWebsocketSequence } from './websocket.sequence';
 import { WebsocketInvokeMethodProvider } from './providers/invoke-method.provider';
 import { WebsocketSendProvider } from './providers/send-method.provider';

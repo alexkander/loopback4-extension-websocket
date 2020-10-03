@@ -1,6 +1,6 @@
 import { expect } from '@loopback/testlab';
 import { Application } from '@loopback/core';
-import { WebsocketServer } from '../../websocketServer';
+import { WebsocketServer } from '../../websocket.server';
 import { WebsocketBindings } from '../../keys';
 import { WebsocketComponent } from '../../websocket.component';
 import { Server, Namespace } from 'socket.io';

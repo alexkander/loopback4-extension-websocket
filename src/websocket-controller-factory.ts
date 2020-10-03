@@ -135,7 +135,7 @@ export class WebsocketControllerFactory extends Context {
     );
   }
 
-  private getCallback(methodName: string) {
+  public getCallback(methodName: string) {
     return async (...args: unknown[]) => {
       let done: WebsocketDoneFunction = async (_response: unknown) => {};
       if (typeof args[args.length - 1] === 'function') {

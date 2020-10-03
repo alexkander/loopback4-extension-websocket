@@ -8,7 +8,7 @@ import {
   WebsocketSequence,
 } from './types';
 import { Server, ServerOptions, Socket } from 'socket.io';
-import { WebsocketServer } from './websocketServer';
+import { WebsocketServer } from './websocket.server';
 import { RequestListener } from '@loopback/http-server';
 
 export namespace WebsocketBindings {
