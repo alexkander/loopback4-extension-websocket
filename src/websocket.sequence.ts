@@ -1,23 +1,29 @@
-import { invokeMethod } from '@loopback/context';
-import { Context, ControllerClass, inject } from '@loopback/core';
+import { inject } from '@loopback/core';
 
-import { WebsocketSequence } from './types';
+import {
+  WebsocketInvokeMethod,
+  WebsocketRejectMethod,
+  WebsocketSendMethod,
+  WebsocketSequence,
+} from './types';
 import { WebsocketBindings } from './keys';
 
 export class DefaultWebsocketSequence implements WebsocketSequence {
   constructor(
-    @inject.context() protected context: Context,
-    @inject(WebsocketBindings.CONTROLLER_INSTANCE)
-    protected controller: ControllerClass
+    @inject(WebsocketBindings.INVOKE_METHOD)
+    protected invoke: WebsocketInvokeMethod,
+    @inject(WebsocketBindings.SEND_METHOD)
+    protected send: WebsocketSendMethod,
+    @inject(WebsocketBindings.REJECT_METHOD)
+    protected reject: WebsocketRejectMethod
   ) {}
 
   async handle(methodName: string, args: unknown[], done: Function) {
-    const response = await invokeMethod(
-      this.controller,
-      methodName,
-      this.context,
-      args
-    );
-    done(response);
+    try {
+      const response = await this.invoke(methodName, args);
+      await this.send(done, response);
+    } catch (err) {
+      await this.reject(done, err);
+    }
   }
 }

@@ -10,8 +10,8 @@ import { HttpServer } from '@loopback/http-server';
 import SocketIO, { Namespace, ServerOptions, Socket } from 'socket.io';
 import { WebsocketBindings } from './keys';
 import { WebsocketOptions } from './types';
-import { getWebSocketMetadata, WebSocketMetadata } from './decorators';
-import { WebSocketControllerFactory } from './websocket-controller-factory';
+import { getWebsocketMetadata, WebsocketMetadata } from './decorators';
+import { WebsocketControllerFactory } from './websocket-controller-factory';
 
 const debug = require('debug')('loopback:websocket');
 
@@ -73,13 +73,13 @@ export class WebSocketServer extends Context {
   controller(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     controllerClass: Constructor<any>,
-    meta?: WebSocketMetadata | string | RegExp
+    meta?: WebsocketMetadata | string | RegExp
   ): Namespace | SocketIO.Server {
     if (meta instanceof RegExp || typeof meta === 'string') {
-      meta = { namespace: meta } as WebSocketMetadata;
+      meta = { namespace: meta } as WebsocketMetadata;
     }
     if (meta == null) {
-      meta = getWebSocketMetadata(controllerClass) as WebSocketMetadata;
+      meta = getWebsocketMetadata(controllerClass) as WebsocketMetadata;
     }
     const nsp = meta?.namespace ? this.io.of(meta.namespace) : this.io;
     if (meta?.name) {
@@ -114,7 +114,7 @@ export class WebSocketServer extends Context {
       socket.id,
       socket.nsp.name
     );
-    return new WebSocketControllerFactory(
+    return new WebsocketControllerFactory(
       this,
       controllerClass
     ).createController(socket);

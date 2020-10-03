@@ -1,6 +1,12 @@
 import { BindingKey, ControllerClass, CoreBindings } from '@loopback/core';
 import { Constructor } from '@loopback/context';
-import { WebsocketOptions, WebsocketSequence } from './types';
+import {
+  WebsocketInvokeMethod,
+  WebsocketOptions,
+  WebsocketRejectMethod,
+  WebsocketSendMethod,
+  WebsocketSequence,
+} from './types';
 import { Server, ServerOptions, Socket } from 'socket.io';
 import { WebSocketServer } from './websocket.server';
 import { RequestListener } from '@loopback/http-server';
@@ -34,4 +40,14 @@ export namespace WebsocketBindings {
     NAMESPACE_KEY_FORMAT.split('[META_NAME]').join(name);
 
   export const SEQUENCE = BindingKey.create<WebsocketSequence>('ws.sequence');
+
+  export const INVOKE_METHOD = BindingKey.create<WebsocketInvokeMethod>(
+    'ws.sequence.invokeMethod'
+  );
+  export const SEND_METHOD = BindingKey.create<WebsocketSendMethod>(
+    'ws.sequence.sendMethod'
+  );
+  export const REJECT_METHOD = BindingKey.create<WebsocketRejectMethod>(
+    'ws.sequence.rejectMethod'
+  );
 }
