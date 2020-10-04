@@ -15,9 +15,9 @@ import { WebsocketControllerFactory } from './websocket-controller-factory';
 
 const debug = require('debug')('loopback:websocket');
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export type SockIOMiddleware = (
   socket: Socket,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fn: (err?: any) => void
 ) => void;
 
