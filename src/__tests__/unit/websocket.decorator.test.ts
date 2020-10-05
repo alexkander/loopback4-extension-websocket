@@ -5,21 +5,8 @@ import { WebsocketApplication } from '../../websocket.application';
 import { WebsocketControllerFactory } from '../../websocket-controller-factory';
 import { DummySocket } from '../fixtures/dummy-socket';
 import { getNewFactory } from '../fixtures/application';
-import { ws } from '../../decorators';
 import { WebsocketBindings } from '../../keys';
-
-@ws.controller({ name: 'decoratorNsp', namespace: '/decorator/test' })
-class DecoratorTestController {
-  methodMustReturnSocket(@ws.socket() socket: Socket) {
-    return socket;
-  }
-  methodMustReturnIoInstance(@ws.io() io: Server) {
-    return io;
-  }
-  methodMustReturnNamespace(@ws.namespace('decoratorNsp') nsp: Namespace) {
-    return nsp;
-  }
-}
+import { DecoratorTestController } from '../fixtures/controllers/decorator-test.ccontroller';
 
 describe('WebsocketControllerFactory', () => {
   let app: WebsocketApplication;

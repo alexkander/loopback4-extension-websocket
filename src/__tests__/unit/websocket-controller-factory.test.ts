@@ -6,7 +6,7 @@ import { getNewFactory } from '../fixtures/application';
 import { WebsocketControllerFactory } from '../../websocket-controller-factory';
 import { WebsocketBindings } from '../../keys';
 import { DummySocket } from '../fixtures/dummy-socket';
-import { WithSubscriberMethodsController } from '../fixtures/controllers/WithSubscriberMethods.controller';
+import { WithSubscriberMethodsController } from '../fixtures/controllers/with-subscriber-methods.controller';
 import { DummyController } from '../fixtures/controllers/Dummy.controller';
 
 describe('WebsocketControllerFactory', () => {

@@ -4,8 +4,8 @@ import { getNewFactory, withConnectedSockets } from '../fixtures/application';
 import {
   SAMPLE_CONTROLER_ROUTE,
   SampleController,
-} from '../fixtures/controllers/Sample.controller';
-import { WithSubscriberMethodsController } from '../fixtures/controllers/WithSubscriberMethods.controller';
+} from '../fixtures/controllers/sample.controller';
+import { WithSubscriberMethodsController } from '../fixtures/controllers/with-subscriber-methods.controller';
 import { WebsocketApplication } from '../../websocket.application';
 
 describe('SocketIOServer', () => {
@@ -42,12 +42,12 @@ describe('SocketIOServer', () => {
       }
     ));
 
-  it('subscribed methods must return the expecto value', () =>
+  it('subscribed methods must return the expect value', () =>
     withConnectedSockets(
       app,
       SAMPLE_CONTROLER_ROUTE,
       async (client, _server) => {
-        const randomNumber = 45;
+        const randomNumber = parseInt(`${Math.random() * 1000}`, 10);
 
         await pEvent(client, 'connect');
 
@@ -55,7 +55,7 @@ describe('SocketIOServer', () => {
           client.emit('oneEvent', { randomNumber }, resolve);
         });
 
-        expect(result).to.be.equal({
+        expect(result).to.be.eql({
           result: {
             text: `the number is ${randomNumber}`,
           },
