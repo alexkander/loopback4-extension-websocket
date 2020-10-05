@@ -5,15 +5,7 @@ import { Socket } from 'socket.io';
 import { DummySocket } from '../fixtures/dummy-socket';
 import { WebsocketControllerFactory } from '../../websocket-controller-factory';
 import { WebsocketBindings } from '../../keys';
-
-export class SequenceTestController {
-  responseSuccess({ oneParam }: { oneParam: string }) {
-    return { text: `yes you are the first params: ${oneParam}` };
-  }
-  responseError({ badParam }: { badParam: string }) {
-    throw new Error(`this is a badParam: ${badParam}`);
-  }
-}
+import { SequenceTestController } from '../fixtures/controllers/sequence-test.controller';
 
 describe('WebsocketSequence', () => {
   let app: WebsocketApplication;
