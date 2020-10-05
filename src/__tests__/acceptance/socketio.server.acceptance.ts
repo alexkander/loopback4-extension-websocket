@@ -8,7 +8,7 @@ import {
 import { WithSubscriberMethodsController } from '../fixtures/controllers/with-subscriber-methods.controller';
 import { WebsocketApplication } from '../../websocket.application';
 
-describe('SocketIOServer', () => {
+describe('Acceptance of Websocket extension', () => {
   let app: WebsocketApplication;
 
   before(async () => {

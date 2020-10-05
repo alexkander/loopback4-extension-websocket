@@ -22,6 +22,7 @@
   "copyright.owner": "IBM Corp.",
   "license": "MIT",
   "dependencies": {
+    "@loopback/boot": "^3.0.1",
     "@loopback/core": "^2.10.1",
     "@loopback/eslint-config": "^10.0.0",
     "@loopback/http-server": "^2.2.2",
