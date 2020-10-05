@@ -1,6 +1,6 @@
 import { ws } from '../../../decorators';
 
-@ws.controller()
+@ws.controller('/with-methods/nsp')
 export class WithSubscriberMethodsController {
   public calledMethods = {
     onConnectOne: 0,

@@ -1,3 +1,6 @@
+import { ws } from '../../../decorators';
+
+@ws.controller('/sequence/nsp')
 export class SequenceTestController {
   responseSuccess({ oneParam }: { oneParam: string }) {
     return { text: `yes you are the first params: ${oneParam}` };
