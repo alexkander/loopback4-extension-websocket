@@ -1,6 +1,5 @@
 import { BootMixin } from '@loopback/boot';
 import { ApplicationConfig } from '@loopback/core';
-import { WebsocketBooter } from '../../booters';
 import { expect } from '@loopback/testlab';
 import { WebsocketApplication } from '../../websocket.application';
 import path from 'path';
@@ -11,13 +10,14 @@ import {
   METHODS_TEST_CONTROLER_NSP,
   SAMPLE_CONTROLER_NSP,
   SEQUENCE_TEST_CONTROLER_NSP,
-} from '../fixtures/controllers';
+} from '../fixtures/ws-controllers';
+import { WebsocketComponent } from '../../websocket.component';
 
 class BooteablewebsocketApplication extends BootMixin(WebsocketApplication) {
   constructor(options: ApplicationConfig) {
     super(options);
+    this.component(WebsocketComponent);
     this.projectRoot = path.join(__dirname, '../fixtures');
-    this.booters(WebsocketBooter);
   }
 }
 

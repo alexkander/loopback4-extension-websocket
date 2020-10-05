@@ -12,8 +12,10 @@ import { DefaultWebsocketSequence } from './websocket.sequence';
 import { WebsocketInvokeMethodProvider } from './providers/invoke-method.provider';
 import { WebsocketSendProvider } from './providers/send-method.provider';
 import { WebsocketRejectProvider } from './providers/reject-method.provider';
+import { WebsocketBooter } from './booters';
 
 export class WebsocketComponent implements Component {
+  booters = [WebsocketBooter];
   providers: ProviderMap = {
     [WebsocketBindings.INVOKE_METHOD.key]: WebsocketInvokeMethodProvider,
     [WebsocketBindings.SEND_METHOD.key]: WebsocketSendProvider,

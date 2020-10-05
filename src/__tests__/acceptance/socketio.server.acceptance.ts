@@ -5,7 +5,7 @@ import {
   SAMPLE_CONTROLER_NSP,
   SampleTestController,
   MethodsTestController,
-} from '../fixtures/controllers';
+} from '../fixtures/ws-controllers';
 import { WebsocketApplication } from '../../websocket.application';
 
 describe('Acceptance of Websocket extension', () => {

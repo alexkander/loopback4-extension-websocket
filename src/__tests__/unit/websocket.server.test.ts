@@ -8,7 +8,7 @@ import {
   SAMPLE_CONTROLER_NSP,
   DummyTestController,
   SampleTestController,
-} from '../fixtures/controllers';
+} from '../fixtures/ws-controllers';
 
 describe('WebsocketServer', () => {
   let io: Server;

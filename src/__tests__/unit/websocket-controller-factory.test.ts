@@ -9,7 +9,7 @@ import { DummySocket } from '../fixtures/dummy-socket';
 import {
   DummyTestController,
   MethodsTestController,
-} from '../fixtures/controllers';
+} from '../fixtures/ws-controllers';
 
 describe('WebsocketControllerFactory', () => {
   let app: WebsocketApplication;

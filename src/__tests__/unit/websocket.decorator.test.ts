@@ -9,7 +9,7 @@ import { WebsocketBindings } from '../../keys';
 import {
   DECORATOR_TEST_CONTROLER_NSP,
   DecoratorTestController,
-} from '../fixtures/controllers';
+} from '../fixtures/ws-controllers';
 
 describe('Websocket decorators', () => {
   let app: WebsocketApplication;
