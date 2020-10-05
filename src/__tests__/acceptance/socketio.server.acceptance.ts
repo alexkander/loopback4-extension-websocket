@@ -63,6 +63,21 @@ describe('SocketIOServer', () => {
       }
     ));
 
+  it('emit events to clients', () =>
+    withConnectedSockets(
+      app,
+      SAMPLE_CONTROLER_ROUTE,
+      async (client, _server) => {
+        const randomNumber = parseInt(`${Math.random() * 1000}`, 10);
+
+        const promiseResult = pEvent(client, 'anotherEvent response');
+        client.emit('anotherEvent', { randomNumber });
+        const result = await promiseResult;
+
+        expect(result).to.be.equal(`this is another number: ${randomNumber}`);
+      }
+    ));
+
   it('subscribed methods must be called on', () =>
     withConnectedSockets(
       app,

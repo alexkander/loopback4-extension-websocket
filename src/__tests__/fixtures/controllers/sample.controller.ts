@@ -1,4 +1,5 @@
 import { ws } from '../../../decorators';
+import { Socket } from 'socket.io';
 
 export const SAMPLE_CONTROLER_ROUTE = '/sample/ws';
 
@@ -9,5 +10,16 @@ export class SampleController {
     return {
       text: `the number is ${randomNumber}`,
     };
+  }
+
+  @ws.subscribe('anotherEvent')
+  anotherMethod(
+    { randomNumber }: { randomNumber: number },
+    @ws.socket() socket: Socket
+  ) {
+    socket.emit(
+      'anotherEvent response',
+      `this is another number: ${randomNumber}`
+    );
   }
 }
