@@ -42,7 +42,28 @@ describe('SocketIOServer', () => {
       }
     ));
 
-  it('subscribed must be called on', () =>
+  it('subscribed methods must return the expecto value', () =>
+    withConnectedSockets(
+      app,
+      SAMPLE_CONTROLER_ROUTE,
+      async (client, _server) => {
+        const randomNumber = 45;
+
+        await pEvent(client, 'connect');
+
+        const result = await new Promise((resolve, _reject) => {
+          client.emit('oneEvent', { randomNumber }, resolve);
+        });
+
+        expect(result).to.be.equal({
+          result: {
+            text: `the number is ${randomNumber}`,
+          },
+        });
+      }
+    ));
+
+  it('subscribed methods must be called on', () =>
     withConnectedSockets(
       app,
       SAMPLE_CONTROLER_ROUTE,
