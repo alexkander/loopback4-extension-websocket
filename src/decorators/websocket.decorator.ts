@@ -1,10 +1,12 @@
 import {
   ClassDecoratorFactory,
   Constructor,
+  inject,
   MetadataAccessor,
   MetadataInspector,
   MethodDecoratorFactory,
 } from '@loopback/context';
+import { WebsocketBindings } from '../keys';
 
 export interface WebsocketMetadata {
   name?: string;
@@ -34,6 +36,18 @@ export function getWebsocketMetadata(controllerClass: Constructor<unknown>) {
 }
 
 export namespace ws {
+  export function socket() {
+    return inject(WebsocketBindings.SOCKET);
+  }
+
+  export function io() {
+    return inject(WebsocketBindings.IO);
+  }
+
+  export function namespace(name: string) {
+    return inject(`ws.namespace.${name}`);
+  }
+
   export function controller(spec: WebsocketMetadata | string | RegExp = {}) {
     if (typeof spec === 'string' || spec instanceof RegExp) {
       spec = { namespace: spec };
