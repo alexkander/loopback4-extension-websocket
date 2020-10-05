@@ -1,7 +1,12 @@
 import { Namespace, Server, Socket } from 'socket.io';
 import { ws } from '../../../decorators';
 
-@ws.controller({ name: 'decoratorNsp', namespace: '/decorator/test' })
+export const DECORATOR_TEST_CONTROLER_NSP = '/decorators/ws';
+
+@ws.controller({
+  name: 'decoratorNsp',
+  namespace: DECORATOR_TEST_CONTROLER_NSP,
+})
 export class DecoratorTestController {
   methodMustReturnSocket(@ws.socket() socket: Socket) {
     return socket;

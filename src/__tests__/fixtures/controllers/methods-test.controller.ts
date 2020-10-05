@@ -1,7 +1,9 @@
 import { ws } from '../../../decorators';
 
-@ws.controller('/with-methods/nsp')
-export class WithSubscriberMethodsController {
+export const METHODS_TEST_CONTROLER_NSP = '/with-methods/ws';
+
+@ws.controller(METHODS_TEST_CONTROLER_NSP)
+export class MethodsTestController {
   public calledMethods = {
     onConnectOne: 0,
     onConnectTwo: 0,

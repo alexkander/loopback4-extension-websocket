@@ -57,6 +57,6 @@ export class WebsocketBooter extends BaseArtifactBooter {
  */
 export const WebsocketControllerDefaults: ArtifactOptions = {
   dirs: ['controllers'],
-  extensions: ['.controller.ws.js'],
+  extensions: ['.controller.js'],
   nested: true,
 };

@@ -1,10 +1,10 @@
 import { ws } from '../../../decorators';
 import { Socket } from 'socket.io';
 
-export const SAMPLE_CONTROLER_ROUTE = '/sample/ws';
+export const SAMPLE_CONTROLER_NSP = '/sample/ws';
 
-@ws.controller(SAMPLE_CONTROLER_ROUTE)
-export class SampleController {
+@ws.controller(SAMPLE_CONTROLER_NSP)
+export class SampleTestController {
   @ws.subscribe('oneEvent')
   oneMethod({ randomNumber }: { randomNumber: number }) {
     return {

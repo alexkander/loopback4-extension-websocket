@@ -5,7 +5,7 @@ import { Socket } from 'socket.io';
 import { DummySocket } from '../fixtures/dummy-socket';
 import { WebsocketControllerFactory } from '../../websocket-controller-factory';
 import { WebsocketBindings } from '../../keys';
-import { SequenceTestController } from '../fixtures/controllers/sequence-test.controller';
+import { SequenceTestController } from '../fixtures/controllers';
 
 describe('WebsocketSequence', () => {
   let app: WebsocketApplication;

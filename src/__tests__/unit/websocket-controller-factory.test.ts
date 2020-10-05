@@ -6,8 +6,10 @@ import { getNewFactory } from '../fixtures/application';
 import { WebsocketControllerFactory } from '../../websocket-controller-factory';
 import { WebsocketBindings } from '../../keys';
 import { DummySocket } from '../fixtures/dummy-socket';
-import { WithSubscriberMethodsController } from '../fixtures/controllers/with-subscriber-methods.controller';
-import { DummyController } from '../fixtures/controllers/Dummy.controller';
+import {
+  DummyTestController,
+  MethodsTestController,
+} from '../fixtures/controllers';
 
 describe('WebsocketControllerFactory', () => {
   let app: WebsocketApplication;
@@ -17,7 +19,7 @@ describe('WebsocketControllerFactory', () => {
   });
 
   it('must instance a ws controller factory', () => {
-    expect(!!getNewFactory(app, DummyController)).to.be.true();
+    expect(!!getNewFactory(app, DummyTestController)).to.be.true();
   });
 
   describe('after create WebsocketControllerFactory instance', () => {
@@ -26,16 +28,14 @@ describe('WebsocketControllerFactory', () => {
     const dummySocket = new DummySocket();
 
     before(async () => {
-      factory = getNewFactory(app, WithSubscriberMethodsController);
+      factory = getNewFactory(app, MethodsTestController);
       createdController = await factory.createController(
         (dummySocket as Object) as Socket
       );
     });
 
     it('.create must return a instance of controller for a socket connection', () => {
-      expect(createdController).to.be.a.instanceOf(
-        WithSubscriberMethodsController
-      );
+      expect(createdController).to.be.a.instanceOf(MethodsTestController);
     });
 
     it('must bind socket', () => {
@@ -47,9 +47,7 @@ describe('WebsocketControllerFactory', () => {
       const controllerConstructor = factory.getSync(
         WebsocketBindings.CONTROLLER_CONSTRUCTOR
       );
-      expect(controllerConstructor).to.be.equal(
-        WithSubscriberMethodsController
-      );
+      expect(controllerConstructor).to.be.equal(MethodsTestController);
     });
 
     it('must bind controller instance', () => {

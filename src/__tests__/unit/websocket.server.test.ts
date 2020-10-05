@@ -4,11 +4,11 @@ import { WebsocketServer } from '../../websocket.server';
 import { WebsocketBindings } from '../../keys';
 import { WebsocketComponent } from '../../websocket.component';
 import { Server, Namespace } from 'socket.io';
-import { DummyController } from '../fixtures/controllers/Dummy.controller';
 import {
-  SAMPLE_CONTROLER_ROUTE,
-  SampleController,
-} from '../fixtures/controllers/Sample.controller';
+  SAMPLE_CONTROLER_NSP,
+  DummyTestController,
+  SampleTestController,
+} from '../fixtures/controllers';
 
 describe('WebsocketServer', () => {
   let io: Server;
@@ -28,7 +28,7 @@ describe('WebsocketServer', () => {
   });
 
   it('must return io instance when registry without string route', () => {
-    const nsp = websocketServer.controller(DummyController);
+    const nsp = websocketServer.controller(DummyTestController);
     expect(nsp).to.be.equal(io);
     // TODO: Check is a Namespace instance
     expect(nsp).to.be.a.instanceOf(Object);
@@ -37,7 +37,7 @@ describe('WebsocketServer', () => {
   it('must return a nsp when a string route is specific it', () => {
     const stringNamespace = '/route/to/connect';
     const nsp = websocketServer.controller(
-      DummyController,
+      DummyTestController,
       stringNamespace
     ) as Namespace;
     expect(nsp.name).to.be.equal(stringNamespace);
@@ -46,7 +46,7 @@ describe('WebsocketServer', () => {
   it('must return a nsp when a regex route is specific it', () => {
     const regexNamespace = /\/regexnamespace/;
     const nsp = websocketServer.controller(
-      DummyController,
+      DummyTestController,
       regexNamespace
     ) as Namespace;
     // TODO: Check namespace regex
@@ -55,7 +55,7 @@ describe('WebsocketServer', () => {
 
   it('must regsitry bind with the nsp when a name option is specific it', () => {
     const optionsName = 'customName';
-    const nsp = websocketServer.controller(DummyController, {
+    const nsp = websocketServer.controller(DummyTestController, {
       name: optionsName,
     }) as Namespace;
     const bindedNsp = app.getSync(
@@ -65,7 +65,7 @@ describe('WebsocketServer', () => {
   });
 
   it('must return a nsp when a controller setup with ws.controller decorator', () => {
-    const nsp = websocketServer.controller(SampleController) as Namespace;
-    expect(nsp.name).to.be.equal(SAMPLE_CONTROLER_ROUTE);
+    const nsp = websocketServer.controller(SampleTestController) as Namespace;
+    expect(nsp.name).to.be.equal(SAMPLE_CONTROLER_NSP);
   });
 });

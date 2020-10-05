@@ -6,9 +6,12 @@ import { WebsocketControllerFactory } from '../../websocket-controller-factory';
 import { DummySocket } from '../fixtures/dummy-socket';
 import { getNewFactory } from '../fixtures/application';
 import { WebsocketBindings } from '../../keys';
-import { DecoratorTestController } from '../fixtures/controllers/decorator-test.ccontroller';
+import {
+  DECORATOR_TEST_CONTROLER_NSP,
+  DecoratorTestController,
+} from '../fixtures/controllers';
 
-describe('WebsocketControllerFactory', () => {
+describe('Websocket decorators', () => {
   let app: WebsocketApplication;
   let factory: WebsocketControllerFactory;
   let createdController: unknown;
@@ -46,7 +49,7 @@ describe('WebsocketControllerFactory', () => {
   });
 
   it('@ws.namespace must inject a namespace instance', async () => {
-    const expectedNsp = appIo.of('/decorator/test');
+    const expectedNsp = appIo.of(DECORATOR_TEST_CONTROLER_NSP);
     const nsp: Namespace = await invokeMethod(
       controller,
       'methodMustReturnNamespace',
