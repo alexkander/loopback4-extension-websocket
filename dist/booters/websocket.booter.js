@@ -8,7 +8,6 @@ exports.WebsocketControllerDefaults = exports.WebsocketBooter = void 0;
 const tslib_1 = require("tslib");
 const core_1 = require("@loopback/core");
 const boot_1 = require("@loopback/boot");
-const websocket_application_1 = require("../websocket.application");
 const keys_1 = require("../keys");
 const websocket_server_1 = require("../websocket.server");
 /**
@@ -36,8 +35,9 @@ let WebsocketBooter = class WebsocketBooter extends boot_1.BaseArtifactBooter {
      */
     async load() {
         await super.load();
+        const wsServer = await this.app.get(keys_1.WebsocketBindings.SERVER);
         this.classes.forEach((cls) => {
-            this.websocketServer.route(cls);
+            wsServer.route(cls);
         });
     }
 };
@@ -47,7 +47,7 @@ WebsocketBooter = tslib_1.__decorate([
     tslib_1.__param(1, core_1.inject(boot_1.BootBindings.PROJECT_ROOT)),
     tslib_1.__param(2, core_1.config()),
     tslib_1.__param(3, core_1.inject(keys_1.WebsocketBindings.SERVER)),
-    tslib_1.__metadata("design:paramtypes", [websocket_application_1.WebsocketApplication, String, Object, websocket_server_1.WebsocketServer])
+    tslib_1.__metadata("design:paramtypes", [core_1.Application, String, Object, websocket_server_1.WebsocketServer])
 ], WebsocketBooter);
 exports.WebsocketBooter = WebsocketBooter;
 /**

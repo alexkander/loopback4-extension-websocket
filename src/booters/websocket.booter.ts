@@ -3,14 +3,13 @@
 // License text available at https://opensource.org/licenses/MIT
 // Base on: https://github.com/strongloop/loopback-next/blob/master/packages/boot/src/booters/repository.booter.ts
 
-import { config, CoreBindings, inject } from '@loopback/core';
+import { Application, config, CoreBindings, inject } from '@loopback/core';
 import {
   ArtifactOptions,
   BaseArtifactBooter,
   BootBindings,
   booter,
 } from '@loopback/boot';
-import { WebsocketApplication } from '../websocket.application';
 import { WebsocketBindings } from '../keys';
 import { WebsocketServer } from '../websocket.server';
 
@@ -27,7 +26,7 @@ import { WebsocketServer } from '../websocket.server';
 @booter('websocketControllers')
 export class WebsocketBooter extends BaseArtifactBooter {
   constructor(
-    @inject(CoreBindings.APPLICATION_INSTANCE) public app: WebsocketApplication,
+    @inject(CoreBindings.APPLICATION_INSTANCE) public app: Application,
     @inject(BootBindings.PROJECT_ROOT) projectRoot: string,
     @config() public websocketControllerConfig: ArtifactOptions = {},
     @inject(WebsocketBindings.SERVER)
@@ -46,8 +45,9 @@ export class WebsocketBooter extends BaseArtifactBooter {
    */
   async load() {
     await super.load();
+    const wsServer = await this.app.get(WebsocketBindings.SERVER);
     this.classes.forEach((cls) => {
-      this.websocketServer.route(cls);
+      wsServer.route(cls);
     });
   }
 }

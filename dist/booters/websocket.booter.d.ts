@@ -1,5 +1,5 @@
+import { Application } from '@loopback/core';
 import { ArtifactOptions, BaseArtifactBooter } from '@loopback/boot';
-import { WebsocketApplication } from '../websocket.application';
 import { WebsocketServer } from '../websocket.server';
 /**
  * A class that extends BaseArtifactBooter to boot the 'WebsocketController' artifact type.
@@ -12,10 +12,10 @@ import { WebsocketServer } from '../websocket.server';
  * @param websocketControllerConfig - Controller Artifact Options Object
  */
 export declare class WebsocketBooter extends BaseArtifactBooter {
-    app: WebsocketApplication;
+    app: Application;
     websocketControllerConfig: ArtifactOptions;
     protected websocketServer: WebsocketServer;
-    constructor(app: WebsocketApplication, projectRoot: string, websocketControllerConfig: ArtifactOptions, websocketServer: WebsocketServer);
+    constructor(app: Application, projectRoot: string, websocketControllerConfig: ArtifactOptions, websocketServer: WebsocketServer);
     /**
      * Uses super method to get a list of Artifact classes. Boot each class by
      * binding it to the application using `app.controller(controller);`.

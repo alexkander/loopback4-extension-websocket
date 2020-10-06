@@ -6,17 +6,15 @@ const core_1 = require("@loopback/core");
 const keys_1 = require("./keys");
 const websocket_server_1 = require("./websocket.server");
 const websocket_sequence_1 = require("./websocket.sequence");
-const invoke_method_provider_1 = require("./providers/invoke-method.provider");
-const send_method_provider_1 = require("./providers/send-method.provider");
-const reject_method_provider_1 = require("./providers/reject-method.provider");
+const providers_1 = require("./providers");
 const booters_1 = require("./booters");
 let WebsocketComponent = class WebsocketComponent {
     constructor(app) {
         this.booters = [booters_1.WebsocketBooter];
         this.providers = {
-            [keys_1.WebsocketBindings.INVOKE_METHOD.key]: invoke_method_provider_1.WebsocketInvokeMethodProvider,
-            [keys_1.WebsocketBindings.SEND_METHOD.key]: send_method_provider_1.WebsocketSendProvider,
-            [keys_1.WebsocketBindings.REJECT_METHOD.key]: reject_method_provider_1.WebsocketRejectProvider,
+            [keys_1.WebsocketBindings.INVOKE_METHOD.key]: providers_1.WebsocketInvokeMethodProvider,
+            [keys_1.WebsocketBindings.SEND_METHOD.key]: providers_1.WebsocketSendProvider,
+            [keys_1.WebsocketBindings.REJECT_METHOD.key]: providers_1.WebsocketRejectProvider,
         };
         app
             .bind(keys_1.WebsocketBindings.SERVER)
