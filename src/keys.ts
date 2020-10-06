@@ -22,9 +22,7 @@ export namespace WebsocketBindings {
   export const REQUEST_LISTENER = BindingKey.create<RequestListener>(
     'ws.request.handler'
   );
-  export const WEBSOCKET_SERVER_CLASS = BindingKey.create<WebsocketServer>(
-    'ws.server.class'
-  );
+  export const SERVER = BindingKey.create<WebsocketServer>('ws.server.class');
   export const SOCKET = BindingKey.create<Socket>('ws.socket');
 
   export const SEQUENCE = BindingKey.create<WebsocketSequence>('ws.sequence');

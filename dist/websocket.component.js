@@ -19,7 +19,7 @@ let WebsocketComponent = class WebsocketComponent {
             [keys_1.WebsocketBindings.REJECT_METHOD.key]: reject_method_provider_1.WebsocketRejectProvider,
         };
         app
-            .bind(keys_1.WebsocketBindings.WEBSOCKET_SERVER_CLASS)
+            .bind(keys_1.WebsocketBindings.SERVER)
             .toClass(websocket_server_1.WebsocketServer)
             .inScope(core_1.BindingScope.SINGLETON);
         app.bind(keys_1.WebsocketBindings.REQUEST_LISTENER).to(() => { });

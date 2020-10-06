@@ -30,7 +30,7 @@ export class WebsocketBooter extends BaseArtifactBooter {
     @inject(CoreBindings.APPLICATION_INSTANCE) public app: WebsocketApplication,
     @inject(BootBindings.PROJECT_ROOT) projectRoot: string,
     @config() public websocketControllerConfig: ArtifactOptions = {},
-    @inject(WebsocketBindings.WEBSOCKET_SERVER_CLASS)
+    @inject(WebsocketBindings.SERVER)
     protected websocketServer: WebsocketServer
   ) {
     super(

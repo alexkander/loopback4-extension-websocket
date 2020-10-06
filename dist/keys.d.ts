@@ -8,7 +8,7 @@ export declare namespace WebsocketBindings {
     const OPTIONS: BindingKey<ServerOptions>;
     const IO: BindingKey<Server>;
     const REQUEST_LISTENER: BindingKey<RequestListener>;
-    const WEBSOCKET_SERVER_CLASS: BindingKey<WebsocketServer>;
+    const SERVER: BindingKey<WebsocketServer>;
     const SOCKET: BindingKey<Socket>;
     const SEQUENCE: BindingKey<WebsocketSequence>;
     const INVOKE_METHOD: BindingKey<WebsocketInvokeMethod>;

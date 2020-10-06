@@ -10,7 +10,7 @@ class WebsocketApplication extends core_1.Application {
         this.component(websocket_component_1.WebsocketComponent);
     }
     get websocketServer() {
-        return this.getSync(keys_1.WebsocketBindings.WEBSOCKET_SERVER_CLASS);
+        return this.getSync(keys_1.WebsocketBindings.SERVER);
     }
     async start() {
         await this.websocketServer.start();

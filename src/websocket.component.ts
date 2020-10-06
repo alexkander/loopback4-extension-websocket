@@ -9,9 +9,11 @@ import {
 import { WebsocketBindings } from './keys';
 import { WebsocketServer } from './websocket.server';
 import { DefaultWebsocketSequence } from './websocket.sequence';
-import { WebsocketInvokeMethodProvider } from './providers/invoke-method.provider';
-import { WebsocketSendProvider } from './providers/send-method.provider';
-import { WebsocketRejectProvider } from './providers/reject-method.provider';
+import {
+  WebsocketInvokeMethodProvider,
+  WebsocketSendProvider,
+  WebsocketRejectProvider,
+} from './providers';
 import { WebsocketBooter } from './booters';
 
 export class WebsocketComponent implements Component {
@@ -24,7 +26,7 @@ export class WebsocketComponent implements Component {
 
   constructor(@inject(CoreBindings.APPLICATION_INSTANCE) app: Application) {
     app
-      .bind(WebsocketBindings.WEBSOCKET_SERVER_CLASS)
+      .bind(WebsocketBindings.SERVER)
       .toClass(WebsocketServer)
       .inScope(BindingScope.SINGLETON);
 

@@ -46,7 +46,7 @@ WebsocketBooter = tslib_1.__decorate([
     tslib_1.__param(0, core_1.inject(core_1.CoreBindings.APPLICATION_INSTANCE)),
     tslib_1.__param(1, core_1.inject(boot_1.BootBindings.PROJECT_ROOT)),
     tslib_1.__param(2, core_1.config()),
-    tslib_1.__param(3, core_1.inject(keys_1.WebsocketBindings.WEBSOCKET_SERVER_CLASS)),
+    tslib_1.__param(3, core_1.inject(keys_1.WebsocketBindings.SERVER)),
     tslib_1.__metadata("design:paramtypes", [websocket_application_1.WebsocketApplication, String, Object, websocket_server_1.WebsocketServer])
 ], WebsocketBooter);
 exports.WebsocketBooter = WebsocketBooter;

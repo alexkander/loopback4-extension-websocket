@@ -8,7 +8,7 @@ var WebsocketBindings;
     WebsocketBindings.OPTIONS = core_1.CoreBindings.APPLICATION_CONFIG.deepProperty('ws.options');
     WebsocketBindings.IO = core_1.BindingKey.create('ws.server');
     WebsocketBindings.REQUEST_LISTENER = core_1.BindingKey.create('ws.request.handler');
-    WebsocketBindings.WEBSOCKET_SERVER_CLASS = core_1.BindingKey.create('ws.server.class');
+    WebsocketBindings.SERVER = core_1.BindingKey.create('ws.server.class');
     WebsocketBindings.SOCKET = core_1.BindingKey.create('ws.socket');
     WebsocketBindings.SEQUENCE = core_1.BindingKey.create('ws.sequence');
     WebsocketBindings.INVOKE_METHOD = core_1.BindingKey.create('ws.sequence.invokeMethod');

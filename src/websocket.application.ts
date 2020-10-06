@@ -10,9 +10,7 @@ export class WebsocketApplication extends Application {
   }
 
   get websocketServer(): WebsocketServer {
-    return this.getSync<WebsocketServer>(
-      WebsocketBindings.WEBSOCKET_SERVER_CLASS
-    );
+    return this.getSync<WebsocketServer>(WebsocketBindings.SERVER);
   }
 
   public async start(): Promise<void> {
