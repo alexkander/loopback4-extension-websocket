@@ -32,6 +32,11 @@ export type SockIOMiddleware = (
   fn: (err?: any) => void
 ) => void;
 
+export const NAMESPACE_KEY_FORMAT = `ws.namespace.[META_NAME]`;
+
+export const getNamespaceKeyForName = (name: string) =>
+  NAMESPACE_KEY_FORMAT.split('[META_NAME]').join(name);
+
 /**
  * A binding filter to match socket.io controllers
  * @param binding - Binding object
@@ -140,9 +145,7 @@ export class WebsocketServer extends Context {
     }
     const nsp = meta?.namespace ? this.io.of(meta.namespace) : this.io;
     if (meta?.name) {
-      this.app
-        .bind(WebsocketBindings.getNamespaceKeyForName(meta.name))
-        .to(nsp);
+      this.app.bind(getNamespaceKeyForName(meta.name)).to(nsp);
     }
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     nsp.on('connection', (socket) =>

@@ -1,6 +1,9 @@
 import { expect } from '@loopback/testlab';
 import { Application } from '@loopback/core';
-import { WebsocketServer } from '../../websocket.server';
+import {
+  getNamespaceKeyForName,
+  WebsocketServer,
+} from '../../websocket.server';
 import { WebsocketBindings } from '../../keys';
 import { WebsocketComponent } from '../../websocket.component';
 import { Server, Namespace } from 'socket.io';
@@ -58,9 +61,7 @@ describe('WebsocketServer', () => {
     const nsp = websocketServer.route(DummyTestController, {
       name: optionsName,
     }) as Namespace;
-    const bindedNsp = app.getSync(
-      WebsocketBindings.getNamespaceKeyForName(optionsName)
-    );
+    const bindedNsp = app.getSync(getNamespaceKeyForName(optionsName));
     expect(bindedNsp).to.be.equal(nsp);
   });
 

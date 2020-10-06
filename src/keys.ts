@@ -12,12 +12,13 @@ import { RequestListener } from '@loopback/http-server';
 
 export namespace WebsocketBindings {
   export const CONFIG: BindingKey<WebsocketOptions> = CoreBindings.APPLICATION_CONFIG.deepProperty(
-    'websocket.server'
+    'ws.config'
   );
   export const OPTIONS: BindingKey<ServerOptions> = CoreBindings.APPLICATION_CONFIG.deepProperty(
-    'websocket.options'
+    'ws.options'
   );
   export const IO = BindingKey.create<Server>('ws.server');
+
   export const REQUEST_LISTENER = BindingKey.create<RequestListener>(
     'ws.request.handler'
   );
@@ -25,9 +26,6 @@ export namespace WebsocketBindings {
     'ws.server.class'
   );
   export const SOCKET = BindingKey.create<Socket>('ws.socket');
-  export const NAMESPACE_KEY_FORMAT = `ws.namespace.[META_NAME]`;
-  export const getNamespaceKeyForName = (name: string) =>
-    NAMESPACE_KEY_FORMAT.split('[META_NAME]').join(name);
 
   export const SEQUENCE = BindingKey.create<WebsocketSequence>('ws.sequence');
 
