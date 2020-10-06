@@ -36,7 +36,7 @@ describe('Websocket decorators', () => {
     const socket: Socket = await invokeMethod(
       controller,
       'methodMustReturnSocket',
-      factory
+      factory.connCtx
     );
     expect(socket).to.be.equal(dummySocket);
   });
@@ -45,7 +45,7 @@ describe('Websocket decorators', () => {
     const io: Server = await invokeMethod(
       controller,
       'methodMustReturnIoInstance',
-      factory
+      factory.connCtx
     );
     expect(io).to.be.equal(appIo);
   });
@@ -55,7 +55,7 @@ describe('Websocket decorators', () => {
     const nsp: Namespace = await invokeMethod(
       controller,
       'methodMustReturnNamespace',
-      factory
+      factory.connCtx
     );
     expect(nsp).to.be.equal(expectedNsp);
   });

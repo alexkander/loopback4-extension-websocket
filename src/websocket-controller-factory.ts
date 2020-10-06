@@ -7,7 +7,6 @@ import {
   MetadataInspector,
   invokeMethod,
 } from '@loopback/context';
-import { Socket } from 'socket.io';
 import { WebsocketBindings } from './keys';
 import {
   WEBSOCKET_CONNECT_METADATA,
@@ -15,32 +14,44 @@ import {
 } from './decorators';
 import { DecoratorType, MetadataMap } from '@loopback/metadata/src/types';
 import { WebsocketDoneFunction } from './types';
+import { Socket } from 'socket.io';
 
 type WebsocketEventMatcherInfo = {
   matcher: string | RegExp;
   methodNames: string[];
 };
 
+/**
+ * Request context for a socket.io request
+ */
+export class WebsocketConnectionContext extends Context {
+  constructor(public readonly socket: Socket, parent: Context) {
+    super(parent);
+  }
+}
+
 /* eslint-disable @typescript-eslint/no-misused-promises */
-export class WebsocketControllerFactory extends Context {
+export class WebsocketControllerFactory {
   private controller: { [method: string]: Function };
+  public readonly connCtx: WebsocketConnectionContext;
 
   constructor(
-    private parentCtx: Context,
+    parentCtx: Context,
     private controllerClass: Constructor<ControllerClass>,
-    private socket: Socket
+    socket: Socket
   ) {
-    super(parentCtx);
-    this.bind(WebsocketBindings.SOCKET).to(socket);
-    this.bind(CoreBindings.CONTROLLER_CLASS).to(this.controllerClass);
-    this.bind(CoreBindings.CONTROLLER_CURRENT)
+    this.connCtx = new WebsocketConnectionContext(socket, parentCtx);
+    this.connCtx.bind(WebsocketBindings.SOCKET).to(this.connCtx.socket);
+    this.connCtx.bind(CoreBindings.CONTROLLER_CLASS).to(this.controllerClass);
+    this.connCtx
+      .bind(CoreBindings.CONTROLLER_CURRENT)
       .toClass(controllerClass)
       .inScope(BindingScope.SINGLETON);
   }
 
   async createController() {
     // Instantiate the controller instance
-    this.controller = await this.get<{ [method: string]: Function }>(
+    this.controller = await this.connCtx.get<{ [method: string]: Function }>(
       CoreBindings.CONTROLLER_CURRENT
     );
     await this.setup();
@@ -58,7 +69,9 @@ export class WebsocketControllerFactory extends Context {
   async connect() {
     const connectMethods = this.getDecoratedMethodsForConnect();
     for (const methodName in connectMethods) {
-      await invokeMethod(this.controller, methodName, this, [this.socket]);
+      await invokeMethod(this.controller, methodName, this.connCtx, [
+        this.connCtx.socket,
+      ]);
     }
   }
 
@@ -79,11 +92,11 @@ export class WebsocketControllerFactory extends Context {
           handlers.push(handler);
           regexMethodsHandlers.set(matcher, handlers);
         } else {
-          this.socket.on(matcher, handler);
+          this.connCtx.socket.on(matcher, handler);
         }
       });
     });
-    this.socket.use(async (packet, next) => {
+    this.connCtx.socket.use(async (packet, next) => {
       const [eventName, ...args] = packet;
       for (const iterator of regexMethodsHandlers.entries()) {
         const [regex, handlers] = iterator;
@@ -139,7 +152,7 @@ export class WebsocketControllerFactory extends Context {
       if (typeof args[args.length - 1] === 'function') {
         done = args.pop() as WebsocketDoneFunction;
       }
-      const eventCtx = new Context(this);
+      const eventCtx = new Context(this.connCtx);
       const sequence = await eventCtx.get(WebsocketBindings.SEQUENCE);
       await sequence.handle(methodName, args, done);
     };

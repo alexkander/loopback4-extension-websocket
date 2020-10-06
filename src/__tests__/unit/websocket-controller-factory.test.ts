@@ -48,19 +48,19 @@ describe('WebsocketControllerFactory', () => {
     });
 
     it('must bind socket', () => {
-      const socket = factory.getSync(WebsocketBindings.SOCKET);
+      const socket = factory.connCtx.getSync(WebsocketBindings.SOCKET);
       expect(socket).to.be.equal(dummySocket);
     });
 
     it('must bind controller constructor', () => {
-      const controllerConstructor = factory.getSync(
+      const controllerConstructor = factory.connCtx.getSync(
         CoreBindings.CONTROLLER_CLASS
       );
       expect(controllerConstructor).to.be.equal(MethodsTestController);
     });
 
     it('must bind controller instance', () => {
-      const controllerInstance = factory.getSync(
+      const controllerInstance = factory.connCtx.getSync(
         CoreBindings.CONTROLLER_CURRENT
       );
       expect(controllerInstance).to.be.equal(createdController);
