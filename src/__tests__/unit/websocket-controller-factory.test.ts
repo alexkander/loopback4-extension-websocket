@@ -10,6 +10,7 @@ import {
   DummyTestController,
   MethodsTestController,
 } from '../fixtures/ws-controllers';
+import { CoreBindings } from '@loopback/core';
 
 describe('WebsocketControllerFactory', () => {
   let app: WebsocketApplication;
@@ -45,14 +46,14 @@ describe('WebsocketControllerFactory', () => {
 
     it('must bind controller constructor', () => {
       const controllerConstructor = factory.getSync(
-        WebsocketBindings.CONTROLLER_CONSTRUCTOR
+        CoreBindings.CONTROLLER_CLASS
       );
       expect(controllerConstructor).to.be.equal(MethodsTestController);
     });
 
     it('must bind controller instance', () => {
       const controllerInstance = factory.getSync(
-        WebsocketBindings.CONTROLLER_INSTANCE
+        CoreBindings.CONTROLLER_CURRENT
       );
       expect(controllerInstance).to.be.equal(createdController);
     });

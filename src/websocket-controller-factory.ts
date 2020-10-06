@@ -1,4 +1,4 @@
-import { ControllerClass } from '@loopback/core';
+import { ControllerClass, CoreBindings } from '@loopback/core';
 import {
   BindingScope,
   Constructor,
@@ -23,27 +23,25 @@ type WebsocketEventMatcherInfo = {
 
 /* eslint-disable @typescript-eslint/no-misused-promises */
 export class WebsocketControllerFactory extends Context {
-  private controller: ControllerClass;
+  private controller: { [method: string]: Function };
 
   constructor(
     private parentCtx: Context,
     private controllerClass: Constructor<ControllerClass>
   ) {
     super(parentCtx);
-    this.bind(WebsocketBindings.CONTROLLER_CONSTRUCTOR).to(
-      this.controllerClass
-    );
-    this.bind(WebsocketBindings.CONTROLLER_CLASS)
-      .toClass(this.controllerClass)
-      .tag('websocket')
-      .inScope(BindingScope.CONTEXT);
+    this.bind(CoreBindings.CONTROLLER_CLASS).to(this.controllerClass);
+    this.bind(CoreBindings.CONTROLLER_CURRENT)
+      .toClass(controllerClass)
+      .inScope(BindingScope.SINGLETON);
   }
 
   async createController(socket: Socket) {
     this.bind(WebsocketBindings.SOCKET).to(socket);
     // Instantiate the controller instance
-    this.controller = await this.get(WebsocketBindings.CONTROLLER_CLASS);
-    this.bind(WebsocketBindings.CONTROLLER_INSTANCE).to(this.controller);
+    this.controller = await this.get<{ [method: string]: Function }>(
+      CoreBindings.CONTROLLER_CURRENT
+    );
     await this.setup(socket);
     return this.controller;
   }

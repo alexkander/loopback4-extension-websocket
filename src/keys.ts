@@ -1,5 +1,4 @@
-import { BindingKey, ControllerClass, CoreBindings } from '@loopback/core';
-import { Constructor } from '@loopback/context';
+import { BindingKey, CoreBindings } from '@loopback/core';
 import {
   WebsocketInvokeMethod,
   WebsocketOptions,
@@ -24,15 +23,6 @@ export namespace WebsocketBindings {
   );
   export const WEBSOCKET_SERVER_CLASS = BindingKey.create<WebsocketServer>(
     'ws.server.class'
-  );
-  export const CONTROLLER_CONSTRUCTOR = BindingKey.create<
-    Constructor<ControllerClass>
-  >('ws.controller.class');
-  export const CONTROLLER_CLASS = BindingKey.create<ControllerClass>(
-    'ws.controller'
-  );
-  export const CONTROLLER_INSTANCE = BindingKey.create<ControllerClass>(
-    'ws.controller.instance'
   );
   export const SOCKET = BindingKey.create<Socket>('ws.socket');
   export const NAMESPACE_KEY_FORMAT = `ws.namespace.[META_NAME]`;
