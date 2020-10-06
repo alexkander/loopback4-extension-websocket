@@ -123,7 +123,7 @@ export class WebsocketServer extends Context {
   }
 
   /**
-   * Register a websocket controller
+   * Register a socketio controller
    * @param controllerClass
    * @param meta
    */
@@ -183,7 +183,7 @@ export class WebsocketServer extends Context {
   controller(controllerClass: Constructor<unknown>) {
     debug('Adding controller %s', controllerClass.name);
     const binding = createBindingFromClass(controllerClass, {
-      namespace: 'socketio.controllers',
+      namespace: WebsocketBindings.CONTROLLERS_NAMESPACE,
       defaultScope: BindingScope.TRANSIENT,
     }).tag(WebsocketTags.SOCKET_IO, CoreTags.CONTROLLER);
     this.add(binding);

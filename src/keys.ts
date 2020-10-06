@@ -40,8 +40,10 @@ export namespace WebsocketBindings {
   export const REJECT_METHOD = BindingKey.create<WebsocketRejectMethod>(
     'ws.sequence.rejectMethod'
   );
+
+  export const CONTROLLERS_NAMESPACE = 'ws.controllers';
 }
 
 export namespace WebsocketTags {
-  export const SOCKET_IO = 'socketio';
+  export const SOCKET_IO = 'websocket';
 }
