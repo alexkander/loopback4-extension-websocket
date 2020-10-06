@@ -22,10 +22,12 @@ describe('Websocket decorators', () => {
   before(async () => {
     app = new WebsocketApplication();
     app.websocketServer.controller(DecoratorTestController);
-    factory = getNewFactory(app, DecoratorTestController);
-    createdController = await factory.createController(
+    factory = getNewFactory(
+      app,
+      DecoratorTestController,
       (dummySocket as Object) as Socket
     );
+    createdController = await factory.createController();
     controller = createdController as DecoratorTestController;
     appIo = await app.get(WebsocketBindings.IO);
   });

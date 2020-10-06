@@ -27,42 +27,42 @@ export class WebsocketControllerFactory extends Context {
 
   constructor(
     private parentCtx: Context,
-    private controllerClass: Constructor<ControllerClass>
+    private controllerClass: Constructor<ControllerClass>,
+    private socket: Socket
   ) {
     super(parentCtx);
+    this.bind(WebsocketBindings.SOCKET).to(socket);
     this.bind(CoreBindings.CONTROLLER_CLASS).to(this.controllerClass);
     this.bind(CoreBindings.CONTROLLER_CURRENT)
       .toClass(controllerClass)
       .inScope(BindingScope.SINGLETON);
   }
 
-  async createController(socket: Socket) {
-    this.bind(WebsocketBindings.SOCKET).to(socket);
+  async createController() {
     // Instantiate the controller instance
     this.controller = await this.get<{ [method: string]: Function }>(
       CoreBindings.CONTROLLER_CURRENT
     );
-    await this.setup(socket);
+    await this.setup();
     return this.controller;
   }
 
   /**
    * Set up the controller for the given socket
-   * @param socket
    */
-  async setup(socket: Socket) {
-    await this.connect(socket);
-    this.registerSubscribeMethods(socket);
+  async setup() {
+    await this.connect();
+    this.registerSubscribeMethods();
   }
 
-  async connect(socket: Socket) {
+  async connect() {
     const connectMethods = this.getDecoratedMethodsForConnect();
     for (const methodName in connectMethods) {
-      await invokeMethod(this.controller, methodName, this, [socket]);
+      await invokeMethod(this.controller, methodName, this, [this.socket]);
     }
   }
 
-  protected registerSubscribeMethods(socket: Socket) {
+  protected registerSubscribeMethods() {
     const methodsByEventHandler = this.getDecorateSubscribeMethodsByEventName();
     const regexMethodsHandlers = new Map<RegExp, Function[]>();
     const methodHandlers = new Map<String, (...args: unknown[]) => unknown>();
@@ -79,11 +79,11 @@ export class WebsocketControllerFactory extends Context {
           handlers.push(handler);
           regexMethodsHandlers.set(matcher, handlers);
         } else {
-          socket.on(matcher, handler);
+          this.socket.on(matcher, handler);
         }
       });
     });
-    socket.use(async (packet, next) => {
+    this.socket.use(async (packet, next) => {
       const [eventName, ...args] = packet;
       for (const iterator of regexMethodsHandlers.entries()) {
         const [regex, handlers] = iterator;

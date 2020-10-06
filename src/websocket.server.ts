@@ -108,8 +108,9 @@ export class WebsocketServer extends Context {
       try {
         await new WebsocketControllerFactory(
           this,
-          controllerClass
-        ).createController(socket);
+          controllerClass,
+          socket
+        ).createController();
       } catch (err) {
         debug(
           'Websocket error: error creating controller instance con connection',

@@ -25,5 +25,7 @@ export const withConnectedSockets = async (
 export const getNewFactory = (
   app: WebsocketApplication,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  controllerClass: Constructor<any>
-) => new WebsocketControllerFactory(app.websocketServer, controllerClass);
+  controllerClass: Constructor<any>,
+  socket: Socket
+) =>
+  new WebsocketControllerFactory(app.websocketServer, controllerClass, socket);

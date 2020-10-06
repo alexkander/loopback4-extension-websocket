@@ -14,25 +14,33 @@ import { CoreBindings } from '@loopback/core';
 
 describe('WebsocketControllerFactory', () => {
   let app: WebsocketApplication;
+  const dummySocket = new DummySocket();
 
   before(async () => {
     app = new WebsocketApplication();
   });
 
   it('must instance a ws controller factory', () => {
-    expect(!!getNewFactory(app, DummyTestController)).to.be.true();
+    expect(
+      !!getNewFactory(
+        app,
+        DummyTestController,
+        (dummySocket as Object) as Socket
+      )
+    ).to.be.true();
   });
 
   describe('after create WebsocketControllerFactory instance', () => {
     let factory: WebsocketControllerFactory;
     let createdController: unknown;
-    const dummySocket = new DummySocket();
 
     before(async () => {
-      factory = getNewFactory(app, MethodsTestController);
-      createdController = await factory.createController(
+      factory = getNewFactory(
+        app,
+        MethodsTestController,
         (dummySocket as Object) as Socket
       );
+      createdController = await factory.createController();
     });
 
     it('.create must return a instance of controller for a socket connection', () => {
