@@ -103,8 +103,7 @@ describe('WebsocketSequence', () => {
 
     it('callback response with error handling', async () => {
       const text = 'this is another param';
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const response: any = await callMethod('responseError', {
+      const response: unknown = await callMethod('responseError', {
         badParam: text,
       });
       expect(!!response).to.be.true();

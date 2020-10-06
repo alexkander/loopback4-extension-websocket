@@ -2,7 +2,6 @@ import {
   Application,
   Constructor,
   Context,
-  ControllerClass,
   CoreBindings,
   inject,
 } from '@loopback/core';
@@ -28,13 +27,11 @@ export class WebsocketServer extends Context {
   constructor(
     @inject(CoreBindings.APPLICATION_INSTANCE) public app: Application,
     @inject(WebsocketBindings.CONFIG, { optional: true })
-    config: WebsocketOptions = {},
+    protected config: WebsocketOptions = {},
     @inject(WebsocketBindings.OPTIONS, { optional: true })
     protected options: ServerOptions = {}
   ) {
     super(app);
-    const requestListener = this.getSync(WebsocketBindings.REQUEST_LISTENER);
-    this._httpServer = new HttpServer(requestListener, config);
     this.io = SocketIO(options);
     app.bind(WebsocketBindings.IO).to(this.io);
   }
@@ -52,6 +49,8 @@ export class WebsocketServer extends Context {
   }
 
   async start() {
+    const requestListener = this.getSync(WebsocketBindings.REQUEST_LISTENER);
+    this._httpServer = new HttpServer(requestListener, this.config);
     await this._httpServer.start();
     this.io.attach(this._httpServer.server, this.options);
   }
@@ -62,7 +61,9 @@ export class WebsocketServer extends Context {
         resolve();
       });
     });
-    await this._httpServer.stop();
+    if (this._httpServer) {
+      await this._httpServer.stop();
+    }
   }
 
   /**
@@ -87,36 +88,34 @@ export class WebsocketServer extends Context {
         .bind(WebsocketBindings.getNamespaceKeyForName(meta.name))
         .to(nsp);
     }
-    nsp.on('connection', (socket) => {
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    nsp.on('connection', (socket) =>
+      this.createSocketHandler(controllerClass)(socket)
+    );
+    return nsp;
+  }
+
+  protected createSocketHandler(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    controllerClass: Constructor<any>
+  ) {
+    return async (socket: Socket) => {
       debug(
-        `Websocket connected: id=${socket.id} namespace=${socket.nsp.name}`
+        'Websocket connected: id=%s namespace=%s',
+        socket.id,
+        socket.nsp.name
       );
-      this.createControllerInstanceForSocket(
-        controllerClass as Constructor<ControllerClass>,
-        socket
-      ).catch((err) => {
+      try {
+        await new WebsocketControllerFactory(
+          this,
+          controllerClass
+        ).createController(socket);
+      } catch (err) {
         debug(
           'Websocket error: error creating controller instance con connection',
           err
         );
-      });
-    });
-    return nsp;
-  }
-
-  protected createControllerInstanceForSocket(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    controllerClass: Constructor<any>,
-    socket: Socket
-  ) {
-    debug(
-      'Websocket connected: id=%s namespace=%s',
-      socket.id,
-      socket.nsp.name
-    );
-    return new WebsocketControllerFactory(
-      this,
-      controllerClass
-    ).createController(socket);
+      }
+    };
   }
 }
