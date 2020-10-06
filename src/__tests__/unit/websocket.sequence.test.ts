@@ -23,7 +23,7 @@ describe('WebsocketSequence', () => {
   describe('with a default providers values', () => {
     before(async () => {
       app = new WebsocketApplication();
-      app.websocketServer.controller(SequenceTestController);
+      app.websocketServer.route(SequenceTestController);
       factory = getNewFactory(
         app,
         SequenceTestController,
@@ -60,7 +60,7 @@ describe('WebsocketSequence', () => {
   describe('with a distinct providers values', () => {
     before(async () => {
       app = new WebsocketApplication();
-      app.websocketServer.controller(SequenceTestController);
+      app.websocketServer.route(SequenceTestController);
       factory = getNewFactory(
         app,
         SequenceTestController,

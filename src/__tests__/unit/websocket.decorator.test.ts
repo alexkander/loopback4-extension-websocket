@@ -21,7 +21,7 @@ describe('Websocket decorators', () => {
 
   before(async () => {
     app = new WebsocketApplication();
-    app.websocketServer.controller(DecoratorTestController);
+    app.websocketServer.route(DecoratorTestController);
     factory = getNewFactory(
       app,
       DecoratorTestController,

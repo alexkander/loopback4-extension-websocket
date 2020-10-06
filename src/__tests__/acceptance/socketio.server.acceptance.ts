@@ -18,8 +18,8 @@ describe('Acceptance of Websocket extension', () => {
         port: 0,
       },
     });
-    app.websocketServer.controller(SampleTestController);
-    app.websocketServer.controller(MethodsTestController);
+    app.websocketServer.route(SampleTestController);
+    app.websocketServer.route(MethodsTestController);
     await app.start();
   });
 

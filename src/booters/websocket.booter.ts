@@ -47,7 +47,7 @@ export class WebsocketBooter extends BaseArtifactBooter {
   async load() {
     await super.load();
     this.classes.forEach((cls) => {
-      this.websockerServer.controller(cls);
+      this.websockerServer.route(cls);
     });
   }
 }

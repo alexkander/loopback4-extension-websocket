@@ -28,7 +28,7 @@ describe('WebsocketServer', () => {
   });
 
   it('must return io instance when registry without string route', () => {
-    const nsp = websocketServer.controller(DummyTestController);
+    const nsp = websocketServer.route(DummyTestController);
     expect(nsp).to.be.equal(io);
     // TODO: Check is a Namespace instance
     expect(nsp).to.be.a.instanceOf(Object);
@@ -36,7 +36,7 @@ describe('WebsocketServer', () => {
 
   it('must return a nsp when a string route is specific it', () => {
     const stringNamespace = '/route/to/connect';
-    const nsp = websocketServer.controller(
+    const nsp = websocketServer.route(
       DummyTestController,
       stringNamespace
     ) as Namespace;
@@ -45,7 +45,7 @@ describe('WebsocketServer', () => {
 
   it('must return a nsp when a regex route is specific it', () => {
     const regexNamespace = /\/regexnamespace/;
-    const nsp = websocketServer.controller(
+    const nsp = websocketServer.route(
       DummyTestController,
       regexNamespace
     ) as Namespace;
@@ -55,7 +55,7 @@ describe('WebsocketServer', () => {
 
   it('must regsitry bind with the nsp when a name option is specific it', () => {
     const optionsName = 'customName';
-    const nsp = websocketServer.controller(DummyTestController, {
+    const nsp = websocketServer.route(DummyTestController, {
       name: optionsName,
     }) as Namespace;
     const bindedNsp = app.getSync(
@@ -65,7 +65,7 @@ describe('WebsocketServer', () => {
   });
 
   it('must return a nsp when a controller setup with ws.controller decorator', () => {
-    const nsp = websocketServer.controller(SampleTestController) as Namespace;
+    const nsp = websocketServer.route(SampleTestController) as Namespace;
     expect(nsp.name).to.be.equal(SAMPLE_CONTROLER_NSP);
   });
 });

@@ -71,7 +71,7 @@ export class WebsocketServer extends Context {
    * @param controllerClass
    * @param meta
    */
-  controller(
+  route(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     controllerClass: Constructor<any>,
     meta?: WebsocketMetadata | string | RegExp
