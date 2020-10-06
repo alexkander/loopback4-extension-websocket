@@ -40,7 +40,7 @@ describe('WebsocketControllerFactory', () => {
         MethodsTestController,
         (dummySocket as Object) as Socket
       );
-      createdController = await factory.createController();
+      createdController = await factory.create();
     });
 
     it('.create must return a instance of controller for a socket connection', () => {

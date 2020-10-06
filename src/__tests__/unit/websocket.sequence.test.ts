@@ -29,7 +29,7 @@ describe('WebsocketSequence', () => {
         SequenceTestController,
         (dummySocket as Object) as Socket
       );
-      await factory.createController();
+      await factory.create();
     });
 
     it('callback response with success', async () => {
@@ -66,7 +66,7 @@ describe('WebsocketSequence', () => {
         SequenceTestController,
         (dummySocket as Object) as Socket
       );
-      await factory.createController();
+      await factory.create();
 
       app
         .bind(WebsocketBindings.INVOKE_METHOD)

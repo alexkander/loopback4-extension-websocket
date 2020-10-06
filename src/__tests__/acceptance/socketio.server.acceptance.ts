@@ -69,7 +69,7 @@ describe('Acceptance of Websocket extension', () => {
   it('subscribed methods must be called on', () =>
     withConnectedSockets(app, SAMPLE_CONTROLER_NSP, async (client, server) => {
       const factory = getNewFactory(app, MethodsTestController, server);
-      const createdController: unknown = await factory.createController();
+      const createdController: unknown = await factory.create();
       const controller = createdController as MethodsTestController;
       const emitAntWait = async (eventName: string, args: unknown) => {
         client.emit(eventName, args);

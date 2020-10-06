@@ -31,7 +31,7 @@ export class WebsocketBooter extends BaseArtifactBooter {
     @inject(BootBindings.PROJECT_ROOT) projectRoot: string,
     @config() public websocketControllerConfig: ArtifactOptions = {},
     @inject(WebsocketBindings.WEBSOCKET_SERVER_CLASS)
-    protected websockerServer: WebsocketServer
+    protected websocketServer: WebsocketServer
   ) {
     super(
       projectRoot,
@@ -47,7 +47,7 @@ export class WebsocketBooter extends BaseArtifactBooter {
   async load() {
     await super.load();
     this.classes.forEach((cls) => {
-      this.websockerServer.route(cls);
+      this.websocketServer.route(cls);
     });
   }
 }

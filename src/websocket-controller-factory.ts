@@ -49,7 +49,7 @@ export class WebsocketControllerFactory {
       .inScope(BindingScope.SINGLETON);
   }
 
-  async createController() {
+  async create() {
     // Instantiate the controller instance
     this.controller = await this.connCtx.get<{ [method: string]: Function }>(
       CoreBindings.CONTROLLER_CURRENT

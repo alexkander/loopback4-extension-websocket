@@ -6,8 +6,8 @@ import {
   inject,
 } from '@loopback/core';
 import { HttpServer } from '@loopback/http-server';
-import SocketIO, { Namespace, ServerOptions, Socket } from 'socket.io';
 import { WebsocketBindings } from './keys';
+import SocketIO, { Namespace, ServerOptions, Socket, Server } from 'socket.io';
 import { WebsocketOptions } from './types';
 import { getWebsocketMetadata, WebsocketMetadata } from './decorators';
 import { WebsocketControllerFactory } from './websocket-controller-factory';
@@ -21,7 +21,7 @@ export type SockIOMiddleware = (
 ) => void;
 
 export class WebsocketServer extends Context {
-  protected io: SocketIO.Server;
+  protected io: Server;
   protected _httpServer: HttpServer;
 
   constructor(
@@ -75,7 +75,7 @@ export class WebsocketServer extends Context {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     controllerClass: Constructor<any>,
     meta?: WebsocketMetadata | string | RegExp
-  ): Namespace | SocketIO.Server {
+  ): Namespace | Server {
     if (meta instanceof RegExp || typeof meta === 'string') {
       meta = { namespace: meta } as WebsocketMetadata;
     }
@@ -110,7 +110,7 @@ export class WebsocketServer extends Context {
           this,
           controllerClass,
           socket
-        ).createController();
+        ).create();
       } catch (err) {
         debug(
           'Websocket error: error creating controller instance con connection',

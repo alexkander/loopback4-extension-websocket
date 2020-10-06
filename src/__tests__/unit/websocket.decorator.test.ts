@@ -27,7 +27,7 @@ describe('Websocket decorators', () => {
       DecoratorTestController,
       (dummySocket as Object) as Socket
     );
-    createdController = await factory.createController();
+    createdController = await factory.create();
     controller = createdController as DecoratorTestController;
     appIo = await app.get(WebsocketBindings.IO);
   });
