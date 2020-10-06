@@ -41,3 +41,7 @@ export namespace WebsocketBindings {
     'ws.sequence.rejectMethod'
   );
 }
+
+export namespace WebsocketTags {
+  export const SOCKET_IO = 'socketio';
+}

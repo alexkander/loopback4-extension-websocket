@@ -1,15 +1,27 @@
 import {
+  BindingFilter,
+  BindingScope,
   Application,
   Constructor,
   Context,
+  ContextView,
+  createBindingFromClass,
   CoreBindings,
   inject,
+  MetadataInspector,
+  CoreTags,
 } from '@loopback/core';
 import { HttpServer } from '@loopback/http-server';
-import { WebsocketBindings } from './keys';
 import SocketIO, { Namespace, ServerOptions, Socket, Server } from 'socket.io';
+import { WebsocketBindings, WebsocketTags } from './keys';
 import { WebsocketOptions } from './types';
-import { getWebsocketMetadata, WebsocketMetadata } from './decorators';
+import {
+  getWebsocketMetadata,
+  WEBSOCKET_CONNECT_METADATA,
+  WEBSOCKET_METADATA,
+  WEBSOCKET_SUBSCRIBE_METADATA,
+  WebsocketMetadata,
+} from './decorators';
 import { WebsocketControllerFactory } from './websocket-controller-factory';
 
 const debug = require('debug')('loopback:websocket');
@@ -20,7 +32,50 @@ export type SockIOMiddleware = (
   fn: (err?: any) => void
 ) => void;
 
+/**
+ * A binding filter to match socket.io controllers
+ * @param binding - Binding object
+ */
+export const controllersBindingFilter: BindingFilter = (binding) => {
+  // It has to be tagged with `controller`
+  if (!binding.tagNames.includes(CoreTags.CONTROLLER)) return false;
+  // It can be explicitly tagged with `socket.io`
+  if (binding.tagNames.includes(WebsocketTags.SOCKET_IO)) return true;
+
+  // Now inspect socket.io decorations
+  if (binding.valueConstructor) {
+    const cls = binding.valueConstructor;
+    const classMeta = MetadataInspector.getClassMetadata(
+      WEBSOCKET_METADATA,
+      cls
+    );
+    if (classMeta != null) {
+      debug('SocketIO metadata found at class %s', cls.name);
+      return true;
+    }
+    const subscribeMeta = MetadataInspector.getAllMethodMetadata(
+      WEBSOCKET_SUBSCRIBE_METADATA,
+      cls.prototype
+    );
+    if (subscribeMeta != null) {
+      debug('SocketIO subscribe metadata found at methods of %s', cls.name);
+      return true;
+    }
+
+    const connectMeta = MetadataInspector.getAllMethodMetadata(
+      WEBSOCKET_CONNECT_METADATA,
+      cls.prototype
+    );
+    if (connectMeta != null) {
+      debug('SocketIO connect metadata found at methods of %s', cls.name);
+      return true;
+    }
+  }
+  return false;
+};
+
 export class WebsocketServer extends Context {
+  private controllers: ContextView;
   protected io: Server;
   protected _httpServer: HttpServer;
 
@@ -33,6 +88,7 @@ export class WebsocketServer extends Context {
   ) {
     super(app);
     this.io = SocketIO(options);
+    this.controllers = this.createView(controllersBindingFilter);
     app.bind(WebsocketBindings.IO).to(this.io);
   }
 
@@ -118,5 +174,37 @@ export class WebsocketServer extends Context {
         );
       }
     };
+  }
+
+  /**
+   * Register a socket.io controller
+   * @param controllerClass
+   */
+  controller(controllerClass: Constructor<unknown>) {
+    debug('Adding controller %s', controllerClass.name);
+    const binding = createBindingFromClass(controllerClass, {
+      namespace: 'socketio.controllers',
+      defaultScope: BindingScope.TRANSIENT,
+    }).tag(WebsocketTags.SOCKET_IO, CoreTags.CONTROLLER);
+    this.add(binding);
+    debug('Controller binding: %j', binding);
+    return binding;
+  }
+
+  /**
+   * Discover all socket.io controllers and register routes
+   */
+  discoverAndRegister() {
+    const bindings = this.controllers.bindings;
+    for (const binding of bindings) {
+      if (binding.valueConstructor) {
+        debug(
+          'Controller binding found: %s %s',
+          binding.key,
+          binding.valueConstructor.name
+        );
+        this.route(binding.valueConstructor as Constructor<object>);
+      }
+    }
   }
 }
