@@ -70,7 +70,7 @@ describe('WebsocketSequence', () => {
 
       app
         .bind(WebsocketBindings.INVOKE_METHOD)
-        .to(async (methodName: string, args: unknown[]) => {
+        .to((context, controller, methodName, args) => {
           if (methodName === 'responseSuccess') {
             return {
               invoqueMethod: 'customInvoqueMethod',
@@ -81,17 +81,13 @@ describe('WebsocketSequence', () => {
           throw new Error('Bad method name');
         });
 
-      app
-        .bind(WebsocketBindings.SEND_METHOD)
-        .to(async (done: Function, result: unknown) => {
-          done({ myBody: result });
-        });
+      app.bind(WebsocketBindings.SEND_METHOD).to((done, result) => {
+        done({ myBody: result });
+      });
 
-      app
-        .bind(WebsocketBindings.REJECT_METHOD)
-        .to(async (done: Function, error: Error) => {
-          done({ myAppErrorMessage: error.message });
-        });
+      app.bind(WebsocketBindings.REJECT_METHOD).to((done, error) => {
+        done({ myAppErrorMessage: error.message });
+      });
     });
 
     it('callback response with success', async () => {

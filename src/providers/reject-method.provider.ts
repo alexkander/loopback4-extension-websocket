@@ -7,7 +7,7 @@ export class WebsocketRejectProvider
     return (done, error) => this.action(done, error);
   }
 
-  async action(done: Function, error: Error) {
+  action(done: Function, error: Error) {
     done({ error });
   }
 }

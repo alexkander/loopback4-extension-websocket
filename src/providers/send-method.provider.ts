@@ -6,7 +6,7 @@ export class WebsocketSendProvider implements Provider<WebsocketSendMethod> {
     return (done, result) => this.action(done, result);
   }
 
-  async action(done: Function, result: unknown) {
+  action(done: Function, result: unknown) {
     done({ result });
   }
 }
