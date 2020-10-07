@@ -55,7 +55,7 @@ describe('WebsocketSequence', () => {
             await factory.create();
             app
                 .bind(keys_1.WebsocketBindings.INVOKE_METHOD)
-                .to(async (methodName, args) => {
+                .to((context, controller, methodName, args) => {
                 if (methodName === 'responseSuccess') {
                     return {
                         invoqueMethod: 'customInvoqueMethod',
@@ -65,14 +65,10 @@ describe('WebsocketSequence', () => {
                 }
                 throw new Error('Bad method name');
             });
-            app
-                .bind(keys_1.WebsocketBindings.SEND_METHOD)
-                .to(async (done, result) => {
+            app.bind(keys_1.WebsocketBindings.SEND_METHOD).to((done, result) => {
                 done({ myBody: result });
             });
-            app
-                .bind(keys_1.WebsocketBindings.REJECT_METHOD)
-                .to(async (done, error) => {
+            app.bind(keys_1.WebsocketBindings.REJECT_METHOD).to((done, error) => {
                 done({ myAppErrorMessage: error.message });
             });
         });

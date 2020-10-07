@@ -4,8 +4,8 @@ exports.WebsocketTags = exports.WebsocketBindings = void 0;
 const core_1 = require("@loopback/core");
 var WebsocketBindings;
 (function (WebsocketBindings) {
-    WebsocketBindings.CONFIG = core_1.CoreBindings.APPLICATION_CONFIG.deepProperty('ws.config');
-    WebsocketBindings.OPTIONS = core_1.CoreBindings.APPLICATION_CONFIG.deepProperty('ws.options');
+    WebsocketBindings.CONFIG = core_1.CoreBindings.APPLICATION_CONFIG.deepProperty('websocket.config');
+    WebsocketBindings.OPTIONS = core_1.CoreBindings.APPLICATION_CONFIG.deepProperty('websocket.options');
     WebsocketBindings.IO = core_1.BindingKey.create('ws.server');
     WebsocketBindings.REQUEST_LISTENER = core_1.BindingKey.create('ws.request.handler');
     WebsocketBindings.SERVER = core_1.BindingKey.create('ws.server.class');

@@ -5,7 +5,7 @@ class WebsocketSendProvider {
     value() {
         return (done, result) => this.action(done, result);
     }
-    async action(done, result) {
+    action(done, result) {
         done({ result });
     }
 }

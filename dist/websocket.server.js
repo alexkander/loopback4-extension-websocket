@@ -49,6 +49,8 @@ let WebsocketServer = class WebsocketServer extends core_1.Context {
         this.app = app;
         this.config = config;
         this.options = options;
+        console.log('options', options);
+        console.log('config', config);
         this.io = socket_io_1.default(options);
         this.controllers = this.createView(exports.controllersBindingFilter);
         app.bind(keys_1.WebsocketBindings.IO).to(this.io);

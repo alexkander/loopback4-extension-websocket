@@ -5,7 +5,7 @@ class WebsocketRejectProvider {
     value() {
         return (done, error) => this.action(done, error);
     }
-    async action(done, error) {
+    action(done, error) {
         done({ error });
     }
 }

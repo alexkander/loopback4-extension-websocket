@@ -12,10 +12,10 @@ import { RequestListener } from '@loopback/http-server';
 
 export namespace WebsocketBindings {
   export const CONFIG: BindingKey<WebsocketOptions> = CoreBindings.APPLICATION_CONFIG.deepProperty(
-    'ws.config'
+    'websocket.config'
   );
   export const OPTIONS: BindingKey<ServerOptions> = CoreBindings.APPLICATION_CONFIG.deepProperty(
-    'ws.options'
+    'websocket.options'
   );
   export const IO = BindingKey.create<Server>('ws.server');
 
