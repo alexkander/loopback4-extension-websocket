@@ -153,6 +153,7 @@ export class WebsocketControllerFactory {
         done = args.pop() as WebsocketDoneFunction;
       }
       const eventCtx = new Context(this.connCtx);
+      eventCtx.bind(WebsocketBindings.MESSAGE).to(args);
       const sequence = await eventCtx.get(WebsocketBindings.SEQUENCE);
       await sequence.handle(methodName, args, done);
     };

@@ -27,6 +27,8 @@ export namespace WebsocketBindings {
 
   export const SEQUENCE = BindingKey.create<WebsocketSequence>('ws.sequence');
 
+  export const MESSAGE = BindingKey.create<unknown[]>('ws.message');
+
   export const INVOKE_METHOD = BindingKey.create<WebsocketInvokeMethod>(
     'ws.sequence.invokeMethod'
   );
