@@ -13,8 +13,11 @@ connections in a friendly way through drivers.
 ## Installation
 
 ```sh
-npm install --save @loopback/websocket
+npm install --save https://github.com/arondn2/loopback4-extension-websocket
 ```
+
+## Example
+https://github.com/arondn2/loopback4-example-websocket
 
 ## How to use
 
@@ -365,6 +368,10 @@ const app = new MyApplication({
   }
 });
 ```
+
+## References
+- https://github.com/raymondfeng/loopback4-example-websocket/
+- https://github.com/strongloop/loopback-next/tree/socketio/extensions/socketio 
 
 ## Contributions
 
