@@ -383,7 +383,6 @@ export class CustomWebsocketSequence implements WebsocketSequence {
 this.bind(WebsocketBindings.SEQUENCE).toClass(CustomWebsocketSequence);
 ```
 
-
 ### Booter of controllers
 The controllers can be and loaded and routed automatically through
 application options `websocketControllers`:
