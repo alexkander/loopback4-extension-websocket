@@ -339,6 +339,51 @@ socket.emit('chat message', '', function (response) {
 });
 ```
 
+### Sequence to handler events
+The process to invoke, send and reject events is controller by a `WebsocketSequence`
+implementation, which can be overwritten binding
+```typescript
+import { Context, ControllerClass, CoreBindings, inject } from '@loopback/core';
+
+import {
+  WebsocketInvokeMethod,
+  WebsocketRejectMethod,
+  WebsocketSendMethod,
+  WebsocketSequence,
+  WebsocketBindings,
+} from '@loopback/websocket';
+
+export class CustomWebsocketSequence implements WebsocketSequence {
+  constructor(
+    @inject.context() protected context: Context,
+    @inject(CoreBindings.CONTROLLER_CURRENT) protected controller: ControllerClass,
+    @inject(WebsocketBindings.INVOKE_METHOD) protected invoke: WebsocketInvokeMethod,
+    @inject(WebsocketBindings.SEND_METHOD) protected send: WebsocketSendMethod,
+    @inject(WebsocketBindings.REJECT_METHOD) protected reject: WebsocketRejectMethod
+  ) {}
+
+  async handle(methodName: string, args: unknown[], done: Function) {
+    console.log('handle controller method', methodName, args);
+    try {
+      const result = await this.invoke(
+        this.context,
+        this.controller,
+        methodName,
+        args
+      );
+      await this.send(done, result);
+    } catch (err) {
+      await this.reject(done, err);
+    }
+  }
+}
+
+...
+// Binding the sequence class
+this.bind(WebsocketBindings.SEQUENCE).toClass(CustomWebsocketSequence);
+```
+
+
 ### Booter of controllers
 The controllers can be and loaded and routed automatically through
 application options `websocketControllers`:

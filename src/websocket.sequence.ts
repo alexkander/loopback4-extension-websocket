@@ -23,13 +23,13 @@ export class DefaultWebsocketSequence implements WebsocketSequence {
 
   async handle(methodName: string, args: unknown[], done: Function) {
     try {
-      const response = await this.invoke(
+      const result = await this.invoke(
         this.context,
         this.controller,
         methodName,
         args
       );
-      await this.send(done, response);
+      await this.send(done, result);
     } catch (err) {
       await this.reject(done, err);
     }
