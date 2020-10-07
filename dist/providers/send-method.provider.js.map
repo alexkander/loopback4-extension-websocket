@@ -1,1 +1,0 @@
-{"version":3,"file":"send-method.provider.js","sourceRoot":"","sources":["../../src/providers/send-method.provider.ts"],"names":[],"mappings":";;;AAGA,MAAa,qBAAqB;IAChC,KAAK;QACH,OAAO,CAAC,IAAI,EAAE,MAAM,EAAE,EAAE,CAAC,IAAI,CAAC,MAAM,CAAC,IAAI,EAAE,MAAM,CAAC,CAAC;IACrD,CAAC;IAED,MAAM,CAAC,IAAc,EAAE,MAAe;QACpC,IAAI,CAAC,EAAE,MAAM,EAAE,CAAC,CAAC;IACnB,CAAC;CACF;AARD,sDAQC"}

@@ -92,8 +92,6 @@ export class WebsocketServer extends Context {
     protected options: ServerOptions = {}
   ) {
     super(app);
-    console.log('options', options);
-    console.log('config', config);
     this.io = SocketIO(options);
     this.controllers = this.createView(controllersBindingFilter);
     app.bind(WebsocketBindings.IO).to(this.io);
