@@ -1,3 +1,6 @@
+# ARCHIVED
+Please use [@loopback/socketio](https://www.npmjs.com/package/@loopback/socketio) in the main repo [loopback-next](https://github.com/strongloop/loopback-next)
+
 # @loopback/websocket
 
 This module allows integrating [socket.io](http://socket.io) to handle
