@@ -34,7 +34,7 @@
     "socket.io": "^2.3.0"
   },
   "devDependencies": {
-    "@loopback/build": "^6.2.4",
+    "@loopback/build": "^12.0.13",
     "@loopback/testlab": "^3.2.6",
     "@loopback/eslint-config": "^10.0.0",
     "@types/socket.io": "^2.1.11",
